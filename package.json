@@ -41,7 +41,11 @@
   "types": "dist/index.d.ts",
   "author": "",
   "description": "",
-  "keywords": [],
+  "keywords": [
+    "drizzle ORM postgres",
+    "drizzle connect postgres",
+    "drizzle migrate postgres"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Enalmada/drizzle-helpers/issues"
