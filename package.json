@@ -37,6 +37,7 @@
   "homepage": "https://github.com/Enalmada/drizzle-helpers",
   "private": false,
   "publishConfig": {
+    "@enalmada:registry": "https://npm.pkg.github.com",
     "access": "public"
   }
 }
