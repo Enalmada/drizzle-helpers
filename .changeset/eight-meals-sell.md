@@ -1,5 +1,5 @@
 ---
-"drizzle-helpers": patch
+"@enalmada/drizzle-helpers": patch
 ---
 
 move to npm module
