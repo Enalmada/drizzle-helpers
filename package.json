@@ -1,18 +1,11 @@
 {
-  "private": false,
-  "version": "0.0.2",
   "name": "@enalmada/drizzle-helpers",
-  "description": "helpful drizzle utilities",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "version": "0.0.2",
   "scripts": {
-    "build": "rm -rf dist && tsc",
+    "build": "rm -rf dist && bun --bun tsc",
     "changeset:version": "bun changeset version",
-    "release": "bun build && bunx changeset publish"
+    "release": "bun run build && bunx changeset publish"
   },
-  "keywords": [],
-  "author": "",
-  "license": "MIT",
   "dependencies": {
     "dotenv": "^16.3.1",
     "dotenv-cli": "^7.3.0",
@@ -23,5 +16,17 @@
     "@changesets/cli": "^2.26.2",
     "@types/node": "^20.6.3",
     "typescript": "^5.2.2"
-  }
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "Adam Lane",
+  "description": "helpful drizzle utilities",
+  "keywords": [],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Enalmada/drizzle-helpers/issues"
+  },
+  "repository": "https://github.com/Enalmada/drizzle-helpers",
+  "homepage": "https://github.com/Enalmada/drizzle-helpers",
+  "private": false
 }
