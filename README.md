@@ -1,48 +1,31 @@
-# npm-module-template
+# Drizzle Helpers
 
-## What
-* [bun](https://bun.sh/docs/bundler) build - with types the best I could (see build notes below)
-* [eslint](https://eslint.org/) with [prettier](https://prettier.io/) formatting
-* [fixpack](https://www.npmjs.com/package/fixpack) to normalize package.json changes along with `npm pkg fix`
-* [husky](https://typicode.github.io/husky/) pre commit hooks
-* [changesets](https://github.com/changesets/changesets) change and release workflow
+This package was created to share some common db code and patterns between many projects. Features, enhancements, and bug fixes
+can be DRY.
 
-## Installation
-Click the [Use this template](https://github.com/Enalmada/npm-module-template/generate) button to create a new repository 
-(or run `bun create Enalmada/npm-module-template <your-new-library-name>`)
+### Migration script: migrate/index.ts
 
-To switch existing repository 
-* `git remote add template https://github.com/Enalmada/npm-module-template`
-* `git fetch template`
-* `git rebase template/main`
-* Resolve conflicts and force push
+requires
 
-### Github settings
-* add NPM_TOKEN with access to deploy to npm to environment variables
-* Actions > General > Workflow Permissions
-  * Read and Write (to allow changesets to create changelog, and release)
-  * Allow github actions to create and approve PR
+- process.env.DATABASE_URL
+- modules `drizzle-orm/postgres-js` and `postgres`. See Dockerfile and entrypoint.sh for examples of how it could be used in production
 
-## Workflow
-* install dependencies `bun install`
-  * Add any new dependencies manually to build.mjs external array so they don't get bundled (just referenced)
-* lint files `bun lint:fix`
-* run tests `bun run test` (not `bun test` as we are not using native tests)
-* run build `bun run build` (not `bun build` as we are using build script)
-* create changeset before PR `changeset` and choose appropriate semver and changelog
+example package.json script:
 
-### TODO
-- [ ] tests framework
-- [ ] instructions to link origin and rebase when changes happen
+```
+  "drizzle:migrate": "dotenv -e ./.env.local node node_modules/drizzle-helpers/dist/migrate ./src/server/db/migrations",
+  "drizzle:migrate:prod": "node node_modules/drizzle-helpers/dist/migrate ./src/server/db/migrations",
+```
 
-### inspiration
-* [bun-lib-starter](https://github.com/wobsoriano/bun-lib-starter)
+### Connection
 
-## Notes
-### Build
-* Using [latest module and target settings](https://stackoverflow.com/questions/72380007/what-typescript-configuration-produces-output-closest-to-node-js-18-capabilities/72380008#72380008) for current LTS
-* using tsc for types until [bun support](https://github.com/oven-sh/bun/issues/5141#issuecomment-1727578701) comes around
+- optimized for next.js dev reloading to avoid connection limits (reuse initialization)
+  see DrizzleConnect.ts for code.
 
-## Contribute
-Using [changesets](https://github.com/changesets/changesets) so please remember to run "changeset" with any PR that might be interesting to people on an older template.
-Although this isn't being deployed as a module, I would like to call out things worth keeping in sync.
+## ORM
+
+- criteria builder
+- create/update methods assume returning one and shift for cleaner service code
+- pagination support for offset
+- order by support
+  see DrizzleOrm.ts for more.
