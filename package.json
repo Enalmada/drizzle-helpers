@@ -1,5 +1,5 @@
 {
-  "version": "0.0.2",
+  "version": "0.0.3",
   "name": "@enalmada/drizzle-helpers",
   "description": "helpful drizzle utilities",
   "main": "dist/index.js",
@@ -15,7 +15,7 @@
     "type-check": "bun --bun tsc --noEmit"
   },
   "keywords": [],
-  "author": "",
+  "author": "Adam Lane",
   "license": "MIT",
   "dependencies": {
     "dotenv": "^16.3.1",
@@ -39,8 +39,7 @@
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "author": "",
-  "description": "",
+  "description": "drizzle postgres utilities for connection, migration, and relational query simplification",
   "keywords": [
     "drizzle ORM postgres",
     "drizzle connect postgres",
