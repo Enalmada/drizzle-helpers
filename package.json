@@ -1,6 +1,6 @@
 {
   "name": "@enalmada/drizzle-helpers",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "scripts": {
     "build": "rm -rf dist && bun --bun tsc",
     "changeset:version": "bun changeset version",
