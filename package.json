@@ -20,13 +20,20 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Adam Lane",
-  "description": "helpful drizzle utilities",
-  "keywords": [],
+  "description": "drizzle postgres utilities for connection, migration, and relational query simplification",
+  "keywords": [
+    "drizzle ORM postgres",
+    "drizzle connect postgres",
+    "drizzle migrate postgres"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Enalmada/drizzle-helpers/issues"
   },
   "repository": "https://github.com/Enalmada/drizzle-helpers",
   "homepage": "https://github.com/Enalmada/drizzle-helpers",
-  "private": false
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  }
 }

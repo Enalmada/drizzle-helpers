@@ -14,7 +14,8 @@
 		"bugs",
 		"repository",
 		"homepage",
-		"private"
+		"private",
+		"publishConfig"
 	],
 	"sortedSubItems": [
         "dependencies",
