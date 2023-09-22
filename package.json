@@ -1,13 +1,14 @@
 {
   "private": false,
   "version": "0.0.1",
-  "name": "drizzle-helpers",
+  "name": "@enalmada/drizzle-helpers",
   "description": "helpful drizzle utilities",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rm -rf dist && tsc",
-    "changeset:version": "bun changeset version"
+    "changeset:version": "bun changeset version",
+    "release": "bun build && bunx changeset publish"
   },
   "keywords": [],
   "author": "",
