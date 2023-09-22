@@ -30,7 +30,10 @@
   "bugs": {
     "url": "https://github.com/Enalmada/drizzle-helpers/issues"
   },
-  "repository": "https://github.com/Enalmada/drizzle-helpers",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Enalmada/drizzle-helpers.git"
+  },
   "homepage": "https://github.com/Enalmada/drizzle-helpers",
   "private": false,
   "publishConfig": {
