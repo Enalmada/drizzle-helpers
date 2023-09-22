@@ -1,5 +1,11 @@
 # @enalmada/drizzle-helpers
 
+## 0.0.4
+
+### Patch Changes
+
+- 1efe4b3: fix deployment
+
 ## 0.0.3
 
 ### Patch Changes
