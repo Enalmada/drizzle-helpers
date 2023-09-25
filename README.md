@@ -24,7 +24,7 @@ example
 ### Connection
 
 - optimized for next.js dev reloading to avoid connection limits (reuse initialization)
-  see DrizzleConnect.ts for code.  
+  see [DrizzleConnect.ts](https://github.com/Enalmada/drizzle-helpers/blob/main/src/DrizzleConnect.ts) for code.  
 
 Usage
 ```ts

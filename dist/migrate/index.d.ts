@@ -1,1 +1,1 @@
-import 'dotenv/config';
+export {};
