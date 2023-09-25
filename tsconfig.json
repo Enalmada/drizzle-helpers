@@ -1,12 +1,17 @@
 {
   "compilerOptions": {
-    "module": "commonjs", // Drizzle has issues with esnext
+    "module": "ES2022",
+    "moduleResolution": "node",
+    "target": "ES2022",
+    "lib": ["ES2022"],
 
     "declaration": true,
-    "jsx": "react-jsx",
     "allowJs": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "noUnusedLocals": true,
+    "noImplicitAny": true,
+    "resolveJsonModule": true,
 
     // best practices
     "strict": true,
@@ -21,5 +26,6 @@
     "src/**/*.ts"
   ],
   "exclude": [
-    "dist", "node_modules", "**/*.spec.ts"]
+    "dist", "node_modules", "**/*.spec.ts"
+  ]
 }

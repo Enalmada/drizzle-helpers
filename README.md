@@ -1,7 +1,6 @@
 # Drizzle Helpers
 
-This package was created to share some common db code and patterns between many projects. Features, enhancements, and bug fixes
-can be DRY.
+Postgres: migration script, connection code, and ORM helpers
 
 ### Migration script: migrate/index.ts
 
@@ -9,7 +8,7 @@ requires
 
 - process.env.DATABASE_URL - although best practice is to not use process in a module, it was just most practical for MVP.  Referring to 
 drizzle config file value would be ideal.
-- modules `drizzle-orm/postgres-js` and `postgres`. See Dockerfile and entrypoint.sh for examples of how it could be used in production
+- modules `drizzle-orm/postgres-js` and `postgres` are bundled. See Dockerfile and entrypoint.sh for examples of how it could be used in production
 
 usage
 `node node_modules/@enalmada/drizzle-helpers/dist/migrate <migration directory>`
@@ -17,14 +16,14 @@ usage
 example
 ```
 // package.json
-  "drizzle:migrate": "dotenv -e ./.env.local node node_modules/@enalmada/drizzle-helpers/dist/migrate ./src/server/db/migrations",
-  "drizzle:migrate:prod": "node node_modules/@enalmada/drizzle-helpers/dist/migrate ./src/server/db/migrations",
+  "drizzle:migrate": "dotenv -e ./.env.local node node_modules/@enalmada/drizzle-helpers/dist/migrate/index.mjs ./src/server/db/migrations",
+  "drizzle:migrate:prod": "node node_modules/@enalmada/drizzle-helpers/dist/migrate/index.mjs ./src/server/db/migrations",
 ```
 
 ### Connection
-
-- optimized for next.js dev reloading to avoid connection limits (reuse initialization)
-  see DrizzleConnect.ts for code.  
+Optimized for next.js dev reloading to avoid hot deploy connection limits 
+  see [DrizzleConnect.ts](https://github.com/Enalmada/drizzle-helpers/blob/main/src/DrizzleConnect.ts) for code.  
+See [prisma guide](https://www.prisma.io/docs/guides/performance-and-optimization/connection-management#prevent-hot-reloading-from-creating-new-instances-of-prismaclient) for more info on concept.
 
 Usage
 ```ts
@@ -47,7 +46,8 @@ export const db: PostgresJsDatabase<typeof schema> = connectToDatabase<typeof sc
 - create/update methods assume returning one and shift for cleaner service code
 - pagination support for offset
 - order by support
-  see DrizzleOrm.ts for more.
+  
+See DrizzleOrm.ts for code.
 
 Usage
 ```ts
@@ -83,3 +83,12 @@ task(user: User, id: string, ctx: MyContextType) {
 
 ## TODO
 [ ] get DATABASE_URL from drizzle config rather than env
+[ ] add `findFirstOrThrow` to make code cleaner and be more [prisma like](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#findfirstorthrow)
+[ ] validate and example fetching relational child data 
+
+## Build Notes
+* Using [latest module and target settings](https://stackoverflow.com/questions/72380007/what-typescript-configuration-produces-output-closest-to-node-js-18-capabilities/72380008#72380008) for current LTS  
+* using tsc for types until [bun support](https://github.com/oven-sh/bun/issues/5141#issuecomment-1727578701) comes around
+
+## Contribute
+Using [changesets](https://github.com/changesets/changesets) so please remember to run "changeset" with any PR
