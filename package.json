@@ -14,7 +14,11 @@
     "release": "bun run build && bunx changeset publish",
     "type-check": "bun --bun tsc --noEmit"
   },
-  "keywords": [],
+    "keywords": [
+    "drizzle ORM postgres",
+    "drizzle connect postgres",
+    "drizzle migrate postgres"
+  ],
   "license": "MIT",
   "dependencies": {
     "dotenv": "^16.3.1",
@@ -40,11 +44,6 @@
   "types": "dist/index.d.ts",
   "author": "Adam Lane",
   "description": "drizzle postgres utilities for connection, migration, and relational query simplification",
-  "keywords": [
-    "drizzle ORM postgres",
-    "drizzle connect postgres",
-    "drizzle migrate postgres"
-  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Enalmada/drizzle-helpers/issues"

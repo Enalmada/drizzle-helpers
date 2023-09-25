@@ -1,6 +1,5 @@
 // https://github.com/drizzle-team/drizzle-orm/blob/main/drizzle-orm/src/postgres-js/README.md
 // https://github.com/joschan21/drizzle-planetscale-starter/blob/master/src/app/page.tsx
-import 'dotenv/config';
 
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
