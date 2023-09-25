@@ -1,4 +1,3 @@
-import dts from 'bun-plugin-dts'
 
 await Bun.build({
     entrypoints: ['./src/index.ts'],
@@ -6,7 +5,6 @@ await Bun.build({
     target: 'node',
     external: ['drizzle-orm', 'postgres'],
     root: './src',
-    plugins: [dts()]
 });
 
 await Bun.build({
@@ -17,5 +15,4 @@ await Bun.build({
     naming: {
         entry: '[dir]/[name].mjs',
     },
-    plugins: [dts()]
 });
