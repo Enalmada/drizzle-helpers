@@ -1,5 +1,11 @@
 # @enalmada/drizzle-helpers
 
+## 0.0.7
+
+### Patch Changes
+
+- ce367b9: build with bun (type with tsc)
+
 ## 0.0.6
 
 ### Patch Changes
