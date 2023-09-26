@@ -5,6 +5,32 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
 import postgres from 'postgres';
 
+const MAX_RETRIES = 10; // Maximum number of connection attempts
+const RETRY_INTERVAL = 1000; // Time to wait between retries in milliseconds
+
+const waitUntilDatabaseIsReady = async (sql: any) => {
+  let attempts = 0;
+  while (attempts < MAX_RETRIES) {
+    try {
+      // Try to make a query to check if the database is ready
+      await sql`SELECT 1`;
+      // If successful, break out of the loop
+      return;
+    } catch (err) {
+      // If an error occurs, wait for the retry interval, and try again
+      if (attempts === 0) {
+        console.log(`⏳ Database not ready. Retrying every ${RETRY_INTERVAL / 1000}s...`);
+      }
+      if (attempts === MAX_RETRIES - 1) {
+        // If maximum retries reached, throw an error
+        throw new Error('⏳ Database not ready after maximum retries');
+      }
+      await new Promise(resolve => setTimeout(resolve, RETRY_INTERVAL));
+      attempts++;
+    }
+  }
+};
+
 const runMigrate = async (migrationsFolder: string) => {
   if (!process.env.DATABASE_URL) {
     throw new Error('DATABASE_URL is not defined');
@@ -12,9 +38,11 @@ const runMigrate = async (migrationsFolder: string) => {
 
   const sql = postgres(process.env.DATABASE_URL, { max: 1 });
 
+  // Wait until the database is ready before running migrations
+  await waitUntilDatabaseIsReady(sql);
+
   const db = drizzle(sql);
 
-  // eslint-disable-next-line no-console
   console.log('⏳ Running migrations...');
 
   const start = Date.now();
@@ -23,7 +51,6 @@ const runMigrate = async (migrationsFolder: string) => {
 
   const end = Date.now();
 
-  // eslint-disable-next-line no-console
   console.log(`✅ Migrations completed in ${end - start}ms`);
 
   process.exit(0);

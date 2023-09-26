@@ -4551,11 +4551,32 @@ Object.assign(Postgres, {
 var src_default = Postgres;
 
 // migratedules/postgre
+var MAX_RETRIES = 10;
+var RETRY_INTERVAL = 1000;
+var waitUntilDatabaseIsReady = async (sql2) => {
+  let attempts = 0;
+  while (attempts < MAX_RETRIES) {
+    try {
+      await sql2`SELECT 1`;
+      return;
+    } catch (err) {
+      if (attempts === 0) {
+        console.log(`\u23F3 Database not ready. Retrying every ${RETRY_INTERVAL / 1000}s...`);
+      }
+      if (attempts === MAX_RETRIES - 1) {
+        throw new Error("\u23F3 Database not ready after maximum retries");
+      }
+      await new Promise((resolve) => setTimeout(resolve, RETRY_INTERVAL));
+      attempts++;
+    }
+  }
+};
 var runMigrate = async (migrationsFolder) => {
   if (!process.env.DATABASE_URL) {
     throw new Error("DATABASE_URL is not defined");
   }
   const sql2 = src_default(process.env.DATABASE_URL, { max: 1 });
+  await waitUntilDatabaseIsReady(sql2);
   const db = drizzle(sql2);
   console.log("\u23F3 Running migrations...");
   const start = Date.now();

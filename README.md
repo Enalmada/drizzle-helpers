@@ -11,7 +11,7 @@ drizzle config file value would be ideal.
 - modules `drizzle-orm/postgres-js` and `postgres` are bundled. See Dockerfile and entrypoint.sh for examples of how it could be used in production
 
 usage
-`node node_modules/@enalmada/drizzle-helpers/dist/migrate <migration directory>`
+`node node_modules/@enalmada/drizzle-helpers/dist/migrate/index.mjs <migration directory>`
 
 example
 ```
