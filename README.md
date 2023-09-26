@@ -1,17 +1,26 @@
-# Drizzle Helpers
+# Drizzle Helpers (for postgres)
 
-Postgres: migration script, connection code, and ORM helpers
+The helpers has 3 components:
+* migration script
+* connection code
+* ORM helpers
 
-### Migration script: migrate/index.ts
+## Migration script
+* validate input
+* wait for db to be ready every second for 10s (although docker has returned "started" it may still take a moment)
+* report status
+* modules `drizzle-orm/postgres-js` and `postgres` are bundled (next.js might be built in standalone without access to node_modules). 
+See Dockerfile and entrypoint.sh for examples of how it could be used in production
 
-requires
-
-- process.env.DATABASE_URL - although best practice is to not use process in a module, it was just most practical for MVP.  Referring to 
+process.env.DATABASE_URL (required) - although best practice is to not use process in a module, it was just most practical for MVP.  Referring to 
 drizzle config file value would be ideal.
-- modules `drizzle-orm/postgres-js` and `postgres` are bundled. See Dockerfile and entrypoint.sh for examples of how it could be used in production
+
+optional
+- process.env.MAX_RETRIES - default 10
+- process.env.RETRY_INTERVAL in ms - default 1000 (check every second)
 
 usage
-`node node_modules/@enalmada/drizzle-helpers/dist/migrate <migration directory>`
+`node node_modules/@enalmada/drizzle-helpers/dist/migrate/index.mjs <migration directory>`
 
 example
 ```
@@ -20,9 +29,17 @@ example
   "drizzle:migrate:prod": "node node_modules/@enalmada/drizzle-helpers/dist/migrate/index.mjs ./src/server/db/migrations",
 ```
 
-### Connection
-Optimized for next.js dev reloading to avoid hot deploy connection limits 
-  see [DrizzleConnect.ts](https://github.com/Enalmada/drizzle-helpers/blob/main/src/DrizzleConnect.ts) for code.  
+see [script](https://github.com/Enalmada/drizzle-helpers/blob/main/src/migrate/index.ts) source
+
+### inspiration
+https://github.com/drizzle-team/drizzle-orm/blob/main/drizzle-orm/src/postgres-js/README.md#running-migrations
+https://github.com/joschan21/drizzle-planetscale-starter/blob/master/src/app/page.tsx
+
+### TODO
+- [ ] figure out how to stop the expected `relation "__drizzle_migrations" already exists, skipping`
+
+## Connection
+* Optimized for next.js dev reloading to avoid hot deploy connection limits 
 See [prisma guide](https://www.prisma.io/docs/guides/performance-and-optimization/connection-management#prevent-hot-reloading-from-creating-new-instances-of-prismaclient) for more info on concept.
 
 Usage
@@ -40,7 +57,9 @@ export const db: PostgresJsDatabase<typeof schema> = connectToDatabase<typeof sc
 });
 ```
 
-### ORM
+see [DrizzleConnect.ts](https://github.com/Enalmada/drizzle-helpers/blob/main/src/DrizzleConnect.ts) for source.
+
+## ORM
 
 - criteria builder
 - create/update methods assume returning one and shift for cleaner service code
@@ -82,9 +101,9 @@ task(user: User, id: string, ctx: MyContextType) {
 ```
 
 ## TODO
-[ ] get DATABASE_URL from drizzle config rather than env
-[ ] add `findFirstOrThrow` to make code cleaner and be more [prisma like](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#findfirstorthrow)
-[ ] validate and example fetching relational child data 
+- [ ] get DATABASE_URL from drizzle config rather than env
+- [ ] add `findFirstOrThrow` to make code cleaner and be more [prisma like](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#findfirstorthrow)
+- [ ] validate and example fetching relational child data 
 
 ## Build Notes
 * Using [latest module and target settings](https://stackoverflow.com/questions/72380007/what-typescript-configuration-produces-output-closest-to-node-js-18-capabilities/72380008#72380008) for current LTS  
