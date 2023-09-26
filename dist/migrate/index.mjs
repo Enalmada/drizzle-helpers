@@ -4551,8 +4551,8 @@ Object.assign(Postgres, {
 var src_default = Postgres;
 
 // migratedules/postgre
-var MAX_RETRIES = 10;
-var RETRY_INTERVAL = 1000;
+var MAX_RETRIES = process.env.DB_MAX_RETRIES ? parseInt(process.env.DB_MAX_RETRIES) : 10;
+var RETRY_INTERVAL = process.env.DB_RETRY_INTERVAL ? parseInt(process.env.DB_RETRY_INTERVAL) : 1000;
 var waitUntilDatabaseIsReady = async (sql2) => {
   let attempts = 0;
   while (attempts < MAX_RETRIES) {
@@ -4576,17 +4576,28 @@ var runMigrate = async (migrationsFolder) => {
     throw new Error("DATABASE_URL is not defined");
   }
   const sql2 = src_default(process.env.DATABASE_URL, { max: 1 });
-  await waitUntilDatabaseIsReady(sql2);
   const db = drizzle(sql2);
-  console.log("\u23F3 Running migrations...");
-  const start = Date.now();
-  await migrate(db, { migrationsFolder });
-  const end = Date.now();
-  console.log(`\u2705 Migrations completed in ${end - start}ms`);
-  process.exit(0);
+  try {
+    console.log("\u23F3 Waiting for database to be ready...");
+    await waitUntilDatabaseIsReady(sql2);
+    console.log("\u23F3 Running migrations...");
+    const start = Date.now();
+    await migrate(db, { migrationsFolder });
+    const end = Date.now();
+    console.log(`\u2705 Migrations completed in ${end - start}ms`);
+  } catch (err) {
+    console.error("\u274C Migration failed");
+    console.error(err);
+    process.exit(1);
+  } finally {
+    await sql2.end();
+  }
 };
-runMigrate(process.argv[2]).catch((err) => {
-  console.error("\u274C Migration failed");
-  console.error(err);
-  process.exit(1);
-});
+(async () => {
+  const migrationsFolder = process.argv[2];
+  if (!migrationsFolder) {
+    console.error("\u274C Migrations folder not provided");
+    process.exit(1);
+  }
+  await runMigrate(migrationsFolder);
+})();

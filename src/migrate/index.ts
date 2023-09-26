@@ -5,8 +5,8 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
 import postgres from 'postgres';
 
-const MAX_RETRIES = 10; // Maximum number of connection attempts
-const RETRY_INTERVAL = 1000; // Time to wait between retries in milliseconds
+const MAX_RETRIES = process.env.DB_MAX_RETRIES ? parseInt(process.env.DB_MAX_RETRIES) : 10;
+const RETRY_INTERVAL = process.env.DB_RETRY_INTERVAL ? parseInt(process.env.DB_RETRY_INTERVAL) : 1000;
 
 const waitUntilDatabaseIsReady = async (sql: any) => {
   let attempts = 0;
@@ -37,27 +37,32 @@ const runMigrate = async (migrationsFolder: string) => {
   }
 
   const sql = postgres(process.env.DATABASE_URL, { max: 1 });
-
-  // Wait until the database is ready before running migrations
-  await waitUntilDatabaseIsReady(sql);
-
   const db = drizzle(sql);
 
-  console.log('⏳ Running migrations...');
+  try {
+    console.log('⏳ Waiting for database to be ready...');
+    await waitUntilDatabaseIsReady(sql);
 
-  const start = Date.now();
+    console.log('⏳ Running migrations...');
+    const start = Date.now();
+    await migrate(db, { migrationsFolder });
+    const end = Date.now();
 
-  await migrate(db, { migrationsFolder: migrationsFolder });
-
-  const end = Date.now();
-
-  console.log(`✅ Migrations completed in ${end - start}ms`);
-
-  process.exit(0);
+    console.log(`✅ Migrations completed in ${end - start}ms`);
+  } catch (err) {
+    console.error('❌ Migration failed');
+    console.error(err);
+    process.exit(1);
+  } finally {
+    await sql.end(); // Ensure that the database connection is closed
+  }
 };
 
-runMigrate(process.argv[2]!).catch((err) => {
-  console.error('❌ Migration failed');
-  console.error(err);
-  process.exit(1);
-});
+(async () => {
+  const migrationsFolder = process.argv[2];
+  if (!migrationsFolder) {
+    console.error('❌ Migrations folder not provided');
+    process.exit(1);
+  }
+  await runMigrate(migrationsFolder);
+})();
