@@ -1,5 +1,11 @@
 # @enalmada/drizzle-helpers
 
+## 0.0.8
+
+### Patch Changes
+
+- 45da3ee: reconnect to db if fail
+
 ## 0.0.7
 
 ### Patch Changes
