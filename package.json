@@ -1,6 +1,6 @@
 {
-  "version": "0.0.7",
   "name": "@enalmada/drizzle-helpers",
+  "version": "0.0.8",
   "description": "helpful drizzle utilities",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
