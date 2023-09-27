@@ -37,6 +37,8 @@ https://github.com/joschan21/drizzle-planetscale-starter/blob/master/src/app/pag
 
 ### TODO
 - [ ] figure out how to stop the expected `relation "__drizzle_migrations" already exists, skipping`
+- [ ] log error when migration fails
+
 
 ## Connection
 * Optimized for next.js dev reloading to avoid hot deploy connection limits 
@@ -58,6 +60,9 @@ export const db: PostgresJsDatabase<typeof schema> = connectToDatabase<typeof sc
 ```
 
 see [DrizzleConnect.ts](https://github.com/Enalmada/drizzle-helpers/blob/main/src/DrizzleConnect.ts) for source.
+
+### TODO
+- [ ] make PgDatabase parameter more generic so neon serverless can work too
 
 ## ORM
 
