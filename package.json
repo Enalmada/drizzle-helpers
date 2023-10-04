@@ -1,9 +1,6 @@
 {
   "name": "@enalmada/drizzle-helpers",
   "version": "0.0.8",
-  "description": "helpful drizzle utilities",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "scripts": {
     "build": "rm -rf dist && bun build.mjs && bun run build:declaration",
     "build:declaration": "tsc --emitDeclarationOnly",
@@ -14,7 +11,6 @@
     "release": "bun run build && bunx changeset publish",
     "type-check": "bun --bun tsc --noEmit"
   },
-  "license": "MIT",
   "dependencies": {
     "dotenv": "^16.3.1",
     "dotenv-cli": "^7.3.0",

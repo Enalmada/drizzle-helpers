@@ -13,4 +13,5 @@ await Bun.build({
     root: './src',
     naming: {
         entry: '[dir]/[name].mjs',
-    },
+    }
+});
