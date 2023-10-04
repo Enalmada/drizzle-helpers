@@ -11,6 +11,12 @@
 Click the [Use this template](https://github.com/Enalmada/npm-module-template/generate) button to create a new repository 
 (or run `bun create Enalmada/npm-module-template <your-new-library-name>`)
 
+To switch existing repository 
+* `git remote add template https://github.com/Enalmada/npm-module-template`
+* `git fetch template`
+* `git rebase template/main`
+* Resolve conflicts and force push
+
 ### Github settings
 * add NPM_TOKEN with access to deploy to npm to environment variables
 * Actions > General > Workflow Permissions
@@ -19,6 +25,7 @@ Click the [Use this template](https://github.com/Enalmada/npm-module-template/ge
 
 ## Workflow
 * install dependencies `bun install`
+  * Add any new dependencies manually to build.mjs external array so they don't get bundled (just referenced)
 * lint files `bun lint:fix`
 * run tests `bun run test` (not `bun test` as we are not using native tests)
 * run build `bun run build` (not `bun build` as we are using build script)

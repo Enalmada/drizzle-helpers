@@ -1,6 +1,6 @@
 {
-  "name": "@enalmada/storybook-addon-mock-urql",
-  "version": "0.0.3",
+  "name": "npm-module-template",
+  "version": "0.0.1",
   "scripts": {
     "build": "rm -rf dist && bun build.mjs && bun run build:declaration",
     "build:declaration": "tsc --emitDeclarationOnly",
@@ -28,8 +28,8 @@
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "author": "Adam Lane",
-  "description": "mock urql queries in storybook",
+  "author": "",
+  "description": "",
   "keywords": [],
   "license": "MIT",
   "bugs": {
