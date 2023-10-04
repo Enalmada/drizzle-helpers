@@ -14,8 +14,8 @@ Click the [Use this template](https://github.com/Enalmada/npm-module-template/ge
 To switch existing repository 
 * `git remote add template https://github.com/Enalmada/npm-module-template`
 * `git fetch template`
-* `git rebase template/main`
-* Resolve conflicts and force push
+* `git merge template/main --allow-unrelated-histories`
+* resolve conflicts and merge
 
 ### Github settings
 * add NPM_TOKEN with access to deploy to npm to environment variables
