@@ -1,0 +1,48 @@
+{
+  "name": "@enalmada/storybook-addon-mock-urql",
+  "version": "0.0.3",
+  "scripts": {
+    "build": "rm -rf dist && bun build.mjs && bun run build:declaration",
+    "build:declaration": "tsc --emitDeclarationOnly",
+    "lint": "eslint --ext .ts,.tsx,.cjs,.mjs && bun type-check",
+    "lint:fix": "eslint --fix --ext .ts,.tsx,.cjs,.mjs && bun type-check",
+    "precommit": "bun lint-staged",
+    "prepare": "husky install",
+    "release": "bun run build && bunx changeset publish",
+    "type-check": "bun --bun tsc --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@changesets/cli": "^2.26.2",
+    "@ianvs/prettier-plugin-sort-imports": "^4.1.0",
+    "@types/node": "^20.6.5",
+    "@typescript-eslint/eslint-plugin": "^6.7.4",
+    "@typescript-eslint/parser": "^6.7.4",
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.1",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "Adam Lane",
+  "description": "mock urql queries in storybook",
+  "keywords": [],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Enalmada/npm-module-template/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Enalmada/npm-module-template.git"
+  },
+  "homepage": "https://github.com/Enalmada/npm-module-template",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module"
+}

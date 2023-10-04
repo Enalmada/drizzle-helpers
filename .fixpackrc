@@ -1,0 +1,29 @@
+{
+    "sortToTop": [
+		"name",
+		"version",
+		"scripts",
+		"dependencies",
+		"devDependencies",
+		"peerDependencies",
+		"main",
+        "types",
+		"author",
+		"description",
+		"keywords",
+		"license",
+		"bugs",
+		"repository",
+		"homepage",
+		"private",
+		"publishConfig"
+	],
+	"sortedSubItems": [
+        "dependencies",
+        "devDependencies",
+        "jshintConfig",
+        "keywords",
+        "scripts"
+    ]
+}
+

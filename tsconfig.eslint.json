@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/**/*.ts",
+    ".lintstagedrc.js",
+    "*.mjs",
+    "*.cjs"
+  ],
+  "compilerOptions": {
+    "noEmit": true
+  }
+}
