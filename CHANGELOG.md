@@ -1,5 +1,11 @@
 # @enalmada/storybook-addon-mock-urql
 
+## 0.0.2
+
+### Patch Changes
+
+- effe886: bun.lockb file needs to be binary
+
 ## 0.0.3
 
 ### Patch Changes
