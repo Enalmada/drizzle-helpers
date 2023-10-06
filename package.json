@@ -4,18 +4,20 @@
   "scripts": {
     "build": "rm -rf dist && bun build.mjs && bun run build:declaration",
     "build:declaration": "tsc --emitDeclarationOnly",
-    "lint": "eslint --ext .ts,.tsx,.cjs,.mjs && bun type-check",
-    "lint:fix": "eslint --fix --ext .ts,.tsx,.cjs,.mjs && bun type-check",
+    "lint": "eslint . --ext .ts,.tsx,.cjs,.mjs && bun type-check",
+    "lint:fix": "eslint . --fix --ext .ts,.tsx,.cjs,.mjs && bun type-check",
     "precommit": "bun lint-staged",
     "prepare": "husky install",
     "release": "bun run build && bunx changeset publish",
+    "test": "bun run test:unit",
+    "test:unit": "vitest",
     "type-check": "bun --bun tsc --noEmit"
   },
   "dependencies": {},
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
     "@ianvs/prettier-plugin-sort-imports": "^4.1.0",
-    "@types/node": "^20.6.5",
+    "@types/node": "^20.8.2",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "@typescript-eslint/parser": "^6.7.4",
     "eslint": "^8.50.0",
@@ -24,7 +26,8 @@
     "husky": "^8.0.3",
     "lint-staged": "^14.0.1",
     "prettier": "^3.0.3",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.6"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -2,7 +2,7 @@
   "overrides": [
     {
       "extends": ["plugin:@typescript-eslint/recommended-requiring-type-checking"],
-      "files": ["*.ts", "*.tsx"],
+      "files": ["src/**/*.ts", "src/**/*.tsx"],
       "parserOptions": {
         "project": "./tsconfig.json",
         "sourceType": "module"
