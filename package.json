@@ -1,6 +1,6 @@
 {
   "name": "npm-module-template",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "scripts": {
     "build": "rm -rf dist && bun build.mjs && bun run build:declaration",
     "build:declaration": "tsc --emitDeclarationOnly",
