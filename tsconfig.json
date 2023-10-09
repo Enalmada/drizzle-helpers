@@ -4,6 +4,7 @@
     "moduleResolution": "node",
     "target": "ES2022",
     "lib": ["ES2022"],
+    "types": ["vitest/globals"],
 
     "declaration": true,
     "allowJs": true,
@@ -26,6 +27,6 @@
     "src/**/*.ts"
   ],
   "exclude": [
-    "dist", "node_modules", "**/*.spec.ts"
+    "dist", "node_modules", "test"
   ]
 }

@@ -1,11 +1,11 @@
-const path = require('path');
+import path from 'path';
 
 const tsc = () => `bun --bun tsc --noEmit`;
 
 const buildEslintCommand = (filenames) =>
     `eslint --fix ${filenames.map((f) => path.relative(process.cwd(), f)).join(' ')}`;
 
-module.exports = {
+export default {
     '**/*.{ts,tsx,mjs,cjs}': [buildEslintCommand, tsc],
     'package.json': ['npm pkg fix', 'fixpack'],
 };
