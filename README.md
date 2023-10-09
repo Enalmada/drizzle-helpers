@@ -32,8 +32,7 @@ To switch existing repository
 * create changeset before PR `changeset` and choose appropriate semver and changelog
 
 ### TODO
-- [ ] tests framework
-- [ ] instructions to link origin and rebase when changes happen
+- [ ] tests framework to bun (when bun supports mocking modules)
 
 ### inspiration
 * [bun-lib-starter](https://github.com/wobsoriano/bun-lib-starter)
