@@ -1,5 +1,11 @@
 # @enalmada/storybook-addon-mock-urql
 
+## 0.0.3
+
+### Patch Changes
+
+- 507c17b: fix lint, add tests
+
 ## 0.0.2
 
 ### Patch Changes
