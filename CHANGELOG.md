@@ -1,5 +1,11 @@
 # @enalmada/storybook-addon-mock-urql
 
+## 0.0.4
+
+### Patch Changes
+
+- c4a16a7: pre-commit to executable, lintstaged to import
+
 ## 0.0.3
 
 ### Patch Changes
