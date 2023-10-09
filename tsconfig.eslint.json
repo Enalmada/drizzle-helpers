@@ -1,12 +1,17 @@
 {
   "extends": "./tsconfig.json",
   "include": [
-    "src/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.mjs",
+    "**/*.cjs",
     ".lintstagedrc.js",
-    "*.mjs",
-    "*.cjs"
+    "vitest.config.ts"
   ],
   "compilerOptions": {
-    "noEmit": true
-  }
+    "noEmit": true,
+  },
+  "exclude": [
+    "dist", "node_modules"
+  ]
 }

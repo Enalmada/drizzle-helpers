@@ -3,7 +3,7 @@ import postgres from 'postgres';
 
 declare global {
   // global use requires var
-  // eslint-disable-next-line no-var
+  // eslint-disable-next-line no-var,@typescript-eslint/no-explicit-any
   var drizzleDbClient: PostgresJsDatabase<any> | undefined;
 }
 
@@ -22,7 +22,7 @@ export function connectToDatabase<T extends Record<string, unknown>>(
   if (nodeEnv === 'production') {
     // Directly create a new instance if in production
     const client = postgres(databaseUrl);
-    return drizzle(client, { schema }) as PostgresJsDatabase<T>;
+    return drizzle(client, { schema });
   } else {
     // Use global variable to store client if in development
     if (!globalThis.drizzleDbClient) {

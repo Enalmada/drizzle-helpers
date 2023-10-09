@@ -1,6 +1,6 @@
 import { type PgTableWithColumns } from 'drizzle-orm/pg-core';
 import { type RelationalQueryBuilder } from 'drizzle-orm/pg-core/query-builders/query';
-import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
+import { type PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 export interface OrderBy {
     sortBy: string;
     sortOrder: 'asc' | 'desc';

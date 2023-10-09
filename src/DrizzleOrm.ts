@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any,@typescript-eslint/ban-ts-comment */
 import { and, asc, desc, eq } from 'drizzle-orm';
 import { type PgTableWithColumns } from 'drizzle-orm/pg-core';
 import { type RelationalQueryBuilder } from 'drizzle-orm/pg-core/query-builders/query';
-import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
+import { type PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 
 type CriteriaType<T> = keyof T;
 
@@ -28,15 +28,18 @@ export interface OrderBy {
   sortOrder: 'asc' | 'desc';
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const buildOrderByClause = <T>(table: PgTableWithColumns<any>, order?: OrderBy) => {
   if (!order) return;
 
   if (order.sortOrder === 'asc') {
     // @ts-ignore
-    return [asc(table![order.sortBy])];
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    return [asc(table[order.sortBy])];
   } else {
     // @ts-ignore
-    return [desc(table![order.sortBy])];
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    return [desc(table[order.sortBy])];
   }
 };
 
