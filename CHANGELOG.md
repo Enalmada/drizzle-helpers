@@ -1,5 +1,11 @@
 # @enalmada/drizzle-helpers
 
+## 0.0.9
+
+### Patch Changes
+
+- 274c79d: boilerplate update
+
 ## 0.0.8
 
 ### Patch Changes
