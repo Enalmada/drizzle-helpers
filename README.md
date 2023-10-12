@@ -25,7 +25,6 @@ To switch existing repository
 
 ## Workflow
 * install dependencies `bun install`
-  * Add any new dependencies manually to build.mjs external array so they don't get bundled (just referenced)
 * lint files `bun lint:fix`
 * run tests `bun run test` (not `bun test` as we are not using native tests)
 * run build `bun run build` (not `bun build` as we are using build script)
