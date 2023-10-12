@@ -1,6 +1,6 @@
 {
   "name": "@enalmada/npm-module-template",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "scripts": {
     "build": "rm -rf dist && bun build.ts && bun run build:declaration",
     "build:declaration": "tsc --emitDeclarationOnly",

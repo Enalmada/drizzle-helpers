@@ -1,5 +1,11 @@
 # @enalmada/storybook-addon-mock-urql
 
+## 0.0.6
+
+### Patch Changes
+
+- de14d1f: automated external in build
+
 ## 0.0.5
 
 ### Patch Changes
