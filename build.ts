@@ -1,3 +1,5 @@
+/// <reference types="bun-types" />
+
 import packageJson from './package.json';
 
 function getExternalsFromPackageJson(): string[] {

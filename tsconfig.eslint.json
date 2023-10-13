@@ -6,6 +6,8 @@
     "**/*.mjs",
     "**/*.cjs",
     ".lintstagedrc.js",
+    "prettier.config.cjs",
+    "build.ts",
     "vitest.config.ts"
   ],
   "compilerOptions": {
