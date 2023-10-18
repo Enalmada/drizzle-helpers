@@ -1,0 +1,32 @@
+name: Generate changeset for Renovate
+
+on:
+  pull_request_target:
+    paths:
+      - '.github/workflows/changesets-renovate.yml'
+      - 'bun.lockb'
+      - 'package.json'
+
+jobs:
+  generate-changeset:
+    runs-on: ubuntu-latest
+    if: github.actor == 'renovate[bot]'
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Git Identity
+        run: |
+          git config --global user.name 'Renovate Bot'
+          git config --global user.email 'noreply@mend.io'
+
+      - name: Run changesets-renovate
+        run: bunx @scaleway/changesets-renovate
