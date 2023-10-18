@@ -14,7 +14,7 @@ on:
         required: true
 
 jobs:
-  test-unit:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -22,4 +22,5 @@ jobs:
         with:
           bun-version: latest
       - run: bun install
+      - run: bun run build
       - run: bun run test:unit
