@@ -2698,7 +2698,7 @@ class Query extends Promise {
     this[originError] = this.handler.debug ? new Error : this.tagged && cachedError(this.strings);
   }
   get origin() {
-    return this.handler.debug ? this[originError].stack : this.tagged ? originStackCache.has(this.strings) ? originStackCache.get(this.strings) : originStackCache.set(this.strings, this[originError].stack).get(this.strings) : "";
+    return (this.handler.debug ? this[originError].stack : this.tagged && originStackCache.has(this.strings) ? originStackCache.get(this.strings) : originStackCache.set(this.strings, this[originError].stack).get(this.strings)) || "";
   }
   static get [Symbol.species]() {
     return Promise;
@@ -2895,8 +2895,10 @@ var firstIsString = function(x) {
 var typeHandlers = function(types) {
   return Object.keys(types).reduce((acc, k) => {
     types[k].from && [].concat(types[k].from).forEach((x) => acc.parsers[x] = types[k].parse);
-    acc.serializers[types[k].to] = types[k].serialize;
-    types[k].from && [].concat(types[k].from).forEach((x) => acc.serializers[x] = types[k].serialize);
+    if (types[k].serialize) {
+      acc.serializers[types[k].to] = types[k].serialize;
+      types[k].from && [].concat(types[k].from).forEach((x) => acc.serializers[x] = types[k].serialize);
+    }
     return acc;
   }, { parsers: {}, serializers: {} });
 };
@@ -3033,6 +3035,7 @@ var builders = Object.entries({
   select,
   as: select,
   returning: select,
+  "\\(": select,
   update(first, rest, parameters, types2, options) {
     return (rest.length ? rest.flat() : Object.keys(first)).map((x) => escapeIdentifier(options.transform.column.to ? options.transform.column.to(x) : x) + "=" + stringifyValue("values", first[x], parameters, types2, options));
   },
@@ -3124,6 +3127,7 @@ import net from "net";
 import tls from "tls";
 import crypto2 from "crypto";
 import Stream from "stream";
+import {performance} from "perf_hooks";
 
 // migratedules/postgres/src/bytes.jss
 class Result extends Array {
@@ -3282,7 +3286,7 @@ var Connection = function(options, queues = {}, { onopen = noop, onend = noop, o
   async function createSocket() {
     let x;
     try {
-      x = options.socket ? await Promise.resolve(options.socket(options)) : net.Socket();
+      x = options.socket ? await Promise.resolve(options.socket(options)) : new net.Socket;
     } catch (e) {
       error(e);
       return;
@@ -3430,13 +3434,14 @@ var Connection = function(options, queues = {}, { onopen = noop, onend = noop, o
     socket.on("connect", ssl ? secure : connected);
     if (options.path)
       return socket.connect(options.path);
+    socket.ssl = ssl;
     socket.connect(port[hostIndex], host[hostIndex]);
     socket.host = host[hostIndex];
     socket.port = port[hostIndex];
     hostIndex = (hostIndex + 1) % port.length;
   }
   function reconnect() {
-    setTimeout(connect, closedDate ? closedDate + delay - Number(process.hrtime.bigint() / 1000000n) : 0);
+    setTimeout(connect, closedDate ? closedDate + delay - performance.now() : 0);
   }
   function connected() {
     try {
@@ -3506,7 +3511,7 @@ var Connection = function(options, queues = {}, { onopen = noop, onend = noop, o
     if (initial)
       return reconnect();
     !hadError && (query3 || sent.length) && error(Errors.connection("CONNECTION_CLOSED", options, socket));
-    closedDate = Number(process.hrtime.bigint() / 1000000n);
+    closedDate = performance.now();
     hadError && options.shared.retries++;
     delay = (typeof backoff === "function" ? backoff(options.shared.retries) : backoff) * 1000;
     onclose(connection2);
@@ -3559,7 +3564,7 @@ var Connection = function(options, queues = {}, { onopen = noop, onend = noop, o
       Connection(options).cancel(query3.state, query3.cancelled.resolve, query3.cancelled.reject);
     if (query3)
       return;
-    connection2.reserved ? x[5] === 73 ? ending ? terminate() : (connection2.reserved = null, onopen(connection2)) : connection2.reserved() : ending ? terminate() : onopen(connection2);
+    connection2.reserved ? !connection2.reserved.release && x[5] === 73 ? ending ? terminate() : (connection2.reserved = null, onopen(connection2)) : connection2.reserved() : ending ? terminate() : onopen(connection2);
   }
   function CommandComplete(x) {
     rows = 0;
@@ -3574,7 +3579,7 @@ var Connection = function(options, queues = {}, { onopen = noop, onend = noop, o
     }
     final && (final(), final = null);
     if (result2.command === "BEGIN" && max !== 1 && !connection2.reserved)
-      return errored(Errors.generic("UNSAFE_TRANSACTION", "Only use sql.begin or max: 1"));
+      return errored(Errors.generic("UNSAFE_TRANSACTION", "Only use sql.begin, sql.reserved or max: 1"));
     if (query3.options.simple)
       return BindComplete();
     if (query3.cursorFn) {
@@ -3635,21 +3640,24 @@ var Connection = function(options, queues = {}, { onopen = noop, onend = noop, o
     write(bytes_default().p().str(await Pass()).z(1).end());
   }
   async function AuthenticationMD5Password(x) {
-    write(bytes_default().p().str("md5" + md5(Buffer.concat([Buffer.from(md5(await Pass() + user)), x.subarray(9)]))).z(1).end());
+    write(bytes_default().p().str("md5" + await md5(Buffer.concat([
+      Buffer.from(await md5(await Pass() + user)),
+      x.subarray(9)
+    ]))).z(1).end());
   }
-  function SASL() {
+  async function SASL() {
     bytes_default().p().str("SCRAM-SHA-256" + bytes_default.N);
     const i = bytes_default.i;
-    nonce = crypto2.randomBytes(18).toString("base64");
+    nonce = (await crypto2.randomBytes(18)).toString("base64");
     write(bytes_default.inc(4).str("n,,n=*,r=" + nonce).i32(bytes_default.i - i - 4, i).end());
   }
   async function SASLContinue(x) {
     const res = x.toString("utf8", 9).split(",").reduce((acc, x2) => (acc[x2[0]] = x2.slice(2), acc), {});
-    const saltedPassword = crypto2.pbkdf2Sync(await Pass(), Buffer.from(res.s, "base64"), parseInt(res.i), 32, "sha256");
-    const clientKey = hmac(saltedPassword, "Client Key");
+    const saltedPassword = await crypto2.pbkdf2Sync(await Pass(), Buffer.from(res.s, "base64"), parseInt(res.i), 32, "sha256");
+    const clientKey = await hmac(saltedPassword, "Client Key");
     const auth = "n=*,r=" + nonce + ",r=" + res.r + ",s=" + res.s + ",i=" + res.i + ",c=biws,r=" + res.r;
-    serverSignature = hmac(hmac(saltedPassword, "Server Key"), auth).toString("base64");
-    write(bytes_default().p().str("c=biws,r=" + res.r + ",p=" + xor(clientKey, hmac(sha256(clientKey), auth)).toString("base64")).end());
+    serverSignature = (await hmac(await hmac(saltedPassword, "Server Key"), auth)).toString("base64");
+    write(bytes_default().p().str("c=biws,r=" + res.r + ",p=" + xor(clientKey, Buffer.from(await hmac(await sha256(clientKey), auth))).toString("base64")).end());
   }
   function SASLFinal(x) {
     if (x.toString("utf8", 9).split(bytes_default.N, 1)[0].slice(2) === serverSignature)
@@ -3982,7 +3990,7 @@ var parse = function(x, state, parsers2, handle, transform) {
       const relation = state[x2.readUInt32BE(i)];
       i += 4;
       const key = x2[i] === 75;
-      handle(key || x2[i] === 79 ? tuples(x2, key ? relation.keys : relation.columns, i += 3, transform).row : null, {
+      handle(key || x2[i] === 79 ? tuples(x2, relation.columns, i += 3, transform).row : null, {
         command: "delete",
         relation,
         key
@@ -3993,7 +4001,7 @@ var parse = function(x, state, parsers2, handle, transform) {
       const relation = state[x2.readUInt32BE(i)];
       i += 4;
       const key = x2[i] === 75;
-      const xs = key || x2[i] === 79 ? tuples(x2, key ? relation.keys : relation.columns, i += 3, transform) : null;
+      const xs = key || x2[i] === 79 ? tuples(x2, relation.columns, i += 3, transform) : null;
       xs && (i = xs.i);
       const { row } = tuples(x2, relation.columns, i + 3, transform);
       handle(row, {
@@ -4095,9 +4103,12 @@ function Subscribe(postgres2, options) {
       lsn: Buffer.concat(x.consistent_point.split("/").map((x2) => Buffer.from(("00000000" + x2).slice(-8), "hex")))
     };
     stream2.on("data", data);
-    stream2.on("error", sql3.close);
+    stream2.on("error", error);
     stream2.on("close", sql3.close);
     return { stream: stream2, state: xs.state };
+    function error(e) {
+      console.error("Unexpected error during logical streaming - reconnecting", e);
+    }
     function data(x2) {
       if (x2[0] === 119)
         parse(x2.subarray(25), state2, sql3.options.parsers, handle, options.transform);
@@ -4209,14 +4220,14 @@ var Postgres = function(a, b2) {
     END: CLOSE,
     PostgresError,
     options,
+    reserve,
     listen,
-    notify,
     begin,
     close,
     end
   });
   return sql2;
-  function Sql(handler2, instant) {
+  function Sql(handler2) {
     handler2.debug = options.debug;
     Object.entries(options.types).reduce((acc, [name, type]) => {
       acc[name] = (x) => new Parameter(x, type.to);
@@ -4226,6 +4237,7 @@ var Postgres = function(a, b2) {
       types: typed,
       typed,
       unsafe,
+      notify,
       array,
       json,
       file
@@ -4236,7 +4248,6 @@ var Postgres = function(a, b2) {
     }
     function sql3(strings, ...args) {
       const query4 = strings && Array.isArray(strings.raw) ? new Query(strings, args, handler2, cancel) : typeof strings === "string" && !args.length ? new Identifier(options.transform.column.to ? options.transform.column.to(strings) : strings) : new Builder(strings, args);
-      instant && query4 instanceof Query && query4.execute();
       return query4;
     }
     function unsafe(string, args = [], options2 = {}) {
@@ -4246,7 +4257,6 @@ var Postgres = function(a, b2) {
         ...options2,
         simple: "simple" in options2 ? options2.simple : args.length === 0
       });
-      instant && query4.execute();
       return query4;
     }
     function file(path2, args = [], options2 = {}) {
@@ -4262,7 +4272,6 @@ var Postgres = function(a, b2) {
         ...options2,
         simple: "simple" in options2 ? options2.simple : args.length === 0
       });
-      instant && query4.execute();
       return query4;
     }
   }
@@ -4309,10 +4318,29 @@ var Postgres = function(a, b2) {
   async function notify(channel, payload) {
     return await sql2`select pg_notify(${channel}, ${"" + payload})`;
   }
+  async function reserve() {
+    const queue3 = queue_default();
+    const c = open.length ? open.shift() : await new Promise((r) => {
+      queries.push({ reserve: r });
+      closed.length && connect(closed.shift());
+    });
+    move(c, reserved);
+    c.reserved = () => queue3.length ? c.execute(queue3.shift()) : move(c, reserved);
+    c.reserved.release = true;
+    const sql3 = Sql(handler2);
+    sql3.release = () => {
+      c.reserved = null;
+      onopen(c);
+    };
+    return sql3;
+    function handler2(q) {
+      c.queue === full ? queue3.push(q) : c.execute(q) || move(c, full);
+    }
+  }
   async function begin(options2, fn) {
     !fn && (fn = options2, options2 = "");
     const queries2 = queue_default();
-    let savepoints = 0, connection3;
+    let savepoints = 0, connection3, prepare = null;
     try {
       await sql2.unsafe("begin " + options2.replace(/[^a-z ]/ig, ""), [], { onexecute }).execute();
       return await scope(connection3, fn);
@@ -4322,6 +4350,7 @@ var Postgres = function(a, b2) {
     async function scope(c, fn2, name) {
       const sql3 = Sql(handler2);
       sql3.savepoint = savepoint;
+      sql3.prepare = (x) => prepare = x.replace(/[^a-z0-9$-_. ]/gi);
       let uncaughtError, result2;
       name && await sql3`savepoint ${sql3(name)}`;
       try {
@@ -4335,7 +4364,9 @@ var Postgres = function(a, b2) {
         await (name ? sql3`rollback to ${sql3(name)}` : sql3`rollback`);
         throw e instanceof PostgresError && e.code === "25P02" && uncaughtError || e;
       }
-      !name && await sql3`commit`;
+      if (!name) {
+        prepare ? await sql3`prepare transaction '${sql3.unsafe(prepare)}'` : await sql3`commit`;
+      }
       return result2;
       function savepoint(name2, fn3) {
         if (name2 && Array.isArray(name2.raw))
@@ -4359,6 +4390,7 @@ var Postgres = function(a, b2) {
     queue3.push(c);
     c.queue = queue3;
     queue3 === open ? c.idleTimer.start() : c.idleTimer.cancel();
+    return c;
   }
   function json(x) {
     return new Parameter(x, 3802);
@@ -4407,6 +4439,7 @@ var Postgres = function(a, b2) {
   function connect(c, query4) {
     move(c, connecting);
     c.connect(query4);
+    return c;
   }
   function onend(c) {
     move(c, ended);
@@ -4415,8 +4448,12 @@ var Postgres = function(a, b2) {
     if (queries.length === 0)
       return move(c, open);
     let max = Math.ceil(queries.length / (connecting.length + 1)), ready = true;
-    while (ready && queries.length && max-- > 0)
-      ready = c.execute(queries.shift());
+    while (ready && queries.length && max-- > 0) {
+      const query4 = queries.shift();
+      if (query4.reserve)
+        return query4.reserve(c);
+      ready = c.execute(query4);
+    }
     ready ? move(c, busy) : move(c, full);
   }
   function onclose(c) {
@@ -4429,10 +4466,11 @@ var Postgres = function(a, b2) {
 var parseOptions = function(a, b2) {
   if (a && a.shared)
     return a;
-  const env = process.env, o = (typeof a === "string" ? b2 : a) || {}, { url, multihost } = parseUrl(a), query4 = [...url.searchParams].reduce((a2, [b3, c]) => (a2[b3] = c, a2), {}), host = o.hostname || o.host || multihost || url.hostname || env.PGHOST || "localhost", port = o.port || url.port || env.PGPORT || 5432, user = o.user || o.username || url.username || env.PGUSERNAME || env.PGUSER || osUsername();
+  const env = process.env, o = (!a || typeof a === "string" ? b2 : a) || {}, { url, multihost } = parseUrl(a), query4 = [...url.searchParams].reduce((a2, [b3, c]) => (a2[b3] = c, a2), {}), host = o.hostname || o.host || multihost || url.hostname || env.PGHOST || "localhost", port = o.port || url.port || env.PGPORT || 5432, user = o.user || o.username || url.username || env.PGUSERNAME || env.PGUSER || osUsername();
   o.no_prepare && (o.prepare = false);
   query4.sslmode && (query4.ssl = query4.sslmode, delete query4.sslmode);
   ("timeout" in o) && (console.log("The timeout option is deprecated, use idle_timeout instead"), o.idle_timeout = o.timeout);
+  const ints = ["idle_timeout", "connect_timeout", "max_lifetime", "max_pipeline", "backoff", "keep_alive"];
   const defaults = {
     max: 10,
     ssl: false,
@@ -4455,7 +4493,11 @@ var parseOptions = function(a, b2) {
     database: o.database || o.db || (url.pathname || "").slice(1) || env.PGDATABASE || user,
     user,
     pass: o.pass || o.password || url.password || env.PGPASSWORD || "",
-    ...Object.entries(defaults).reduce((acc, [k, d]) => (acc[k] = (k in o) ? o[k] : (k in query4) ? query4[k] === "disable" || query4[k] === "false" ? false : query4[k] : env["PG" + k.toUpperCase()] || d, acc), {}),
+    ...Object.entries(defaults).reduce((acc, [k, d]) => {
+      const value = k in o ? o[k] : (k in query4) ? query4[k] === "disable" || query4[k] === "false" ? false : query4[k] : env["PG" + k.toUpperCase()] || d;
+      acc[k] = typeof value === "string" && ints.includes(k) ? +value : value;
+      return acc;
+    }, {}),
     connection: {
       application_name: "postgres.js",
       ...o.connection,
@@ -4504,7 +4546,7 @@ var parseTransform = function(x) {
   };
 };
 var parseUrl = function(url) {
-  if (typeof url !== "string")
+  if (!url || typeof url !== "string")
     return { url: { searchParams: new Map } };
   let host = url;
   host = host.slice(host.indexOf("://") + 3).split(/[?/]/)[0];
