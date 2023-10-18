@@ -1,4 +1,4 @@
-// migratedules/postgres/src/bytes.jss.jss.mjs
+// migratedules/postgres/src/bytes.jssjsss.mjs
 var is = function(value, type) {
   if (!value || typeof value !== "object") {
     return false;
@@ -2021,7 +2021,7 @@ class NoopLogger {
   }
 }
 
-// migratedules/postgres/src/bytes.jss.jss.mjsjs
+// migratedules/postgres/src/bytes.jssjsss.mjsjs
 class PgDelete extends QueryPromise {
   session;
   dialect;
@@ -2468,7 +2468,7 @@ class PgTransaction extends PgDatabase {
   }
 }
 
-// migratedules/postgres/src/bytes.jss.jss.mjsjs.
+// migratedules/postgres/src/bytes.jssjsss.mjsjs.
 var drizzle = function(client, config = {}) {
   const dialect = new PgDialect;
   let logger;
@@ -2603,7 +2603,7 @@ class PostgresJsTransaction extends PgTransaction {
   }
 }
 
-// migratedules/postgres/src/bytes.jss.j
+// migratedules/postgres/src/bytes.jssjs
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
@@ -2646,7 +2646,7 @@ var readMigrationFiles = function(config) {
   return migrationQueries;
 };
 
-// migratedules/postgres/src/bytes.jss.jss.mjsjs.mjs
+// migratedules/postgres/src/bytes.jssjsss.mjsjs.mjs
 import"node:crypto";
 import"node:fs";
 import"node:path";
@@ -3119,7 +3119,7 @@ fromKebab.column = { to: fromKebab };
 var kebab = { ...toKebab };
 kebab.column.to = fromKebab;
 
-// migratedules/postgres/src/bytes.jss.jss
+// migratedules/postgres/src/bytes.jssjsss
 import net from "net";
 import tls from "tls";
 import crypto2 from "crypto";
@@ -3242,7 +3242,7 @@ var b = Object.assign(reset, messages, {
 });
 var bytes_default = b;
 
-// migratedules/postgres/src/bytes.jss.jss
+// migratedules/postgres/src/bytes.jssjsss
 var Connection = function(options, queues = {}, { onopen = noop, onend = noop, onclose = noop } = {}) {
   const {
     ssl,
@@ -3931,7 +3931,7 @@ var errorFields = {
   82: "routine"
 };
 
-// migratedules/postgres/src/bytes.jss.js
+// migratedules/postgres/src/bytes.jssjss
 var Time = function(x) {
   return new Date(Date.UTC(2000, 0, 1) + Number(x / BigInt(1000)));
 };
