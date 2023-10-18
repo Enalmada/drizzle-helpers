@@ -1,29 +1,11 @@
 /// <reference types="bun-types" />
 
-import packageJson from './package.json';
-
-function getExternalsFromPackageJson(): string[] {
-  const sections: (keyof typeof packageJson)[] = [
-    'dependencies',
-    'devDependencies',
-    'peerDependencies',
-  ];
-  const externals: string[] = [];
-
-  for (const section of sections) {
-    if (packageJson[section]) {
-      externals.push(...Object.keys(packageJson[section]));
-    }
-  }
-
-  // Removing potential duplicates between dev and peer
-  return Array.from(new Set(externals));
-}
+import getExternalDependencies, { bunBuild } from '@enalmada/bun-externals';
 
 async function buildWithExternals(): Promise<void> {
-  const externalDeps = getExternalsFromPackageJson();
+  const externalDeps = await getExternalDependencies();
 
-  await Bun.build({
+  await bunBuild({
     entrypoints: ['./src/index.ts'],
     outdir: './dist',
     target: 'node',
@@ -31,7 +13,7 @@ async function buildWithExternals(): Promise<void> {
     root: './src',
   });
 
-  await Bun.build({
+  await bunBuild({
     entrypoints: ['./src/migrate/index.ts'],
     outdir: './dist',
     target: 'node',
@@ -44,4 +26,4 @@ async function buildWithExternals(): Promise<void> {
   });
 }
 
-buildWithExternals();
+void buildWithExternals();
