@@ -8,18 +8,7 @@ on:
     branches:
       - main
   workflow_dispatch:
-    inputs:
-      target_url:
-        description: 'Deployment target URL'
-        required: true
 
 jobs:
-  test-unit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
-      - run: bun install
-      - run: bun run test:unit
+  tests:
+    uses: enalmada/.github/.github/workflows/run-tests.yml@main
