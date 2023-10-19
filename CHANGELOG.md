@@ -1,5 +1,11 @@
 # @enalmada/drizzle-helpers
 
+## 0.0.10
+
+### Patch Changes
+
+- 01b2b3a: postgres dependency
+
 ## 0.0.9
 
 ### Patch Changes
