@@ -8,3 +8,4 @@ yarn-error.log
 lib
 tmp
 package-lock.json
+.vercel
