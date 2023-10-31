@@ -1,0 +1,36 @@
+{
+  "name": "website",
+  "version": "0.0.1",
+  "scripts": {
+    "astro": "astro",
+    "build": "astro check && astro build",
+    "dev": "astro dev",
+    "lint": "eslint . --ext .ts,.tsx,.cjs,.mjs && bun type-check",
+    "lint:fix": "eslint . --fix --ext .ts,.tsx,.cjs,.mjs && bun type-check",
+    "preview": "astro preview",
+    "start": "astro dev",
+    "type-check": "bun --bun tsc --noEmit"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.3.0",
+    "@astrojs/prefetch": "^0.4.1",
+    "@astrojs/react": "^3.0.4",
+    "@astrojs/starlight": "^0.11.2",
+    "@astrojs/tailwind": "^5.0.2",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
+    "astro": "^3.4.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "sharp": "^0.32.6",
+    "tailwindcss": "^3.0.24",
+    "typescript": "^5.2.2"
+  },
+  "author": "",
+  "description": "module website",
+  "license": "UNLICENSED",
+  "type": "module",
+  "trustedDependencies": [
+    "sharp"
+  ]
+}

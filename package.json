@@ -4,6 +4,7 @@
   "scripts": {
     "build": "rm -rf dist && bun build.ts && bun run build:declaration",
     "build:declaration": "tsc --emitDeclarationOnly",
+    "dev": "cd website && bun run dev",
     "lint": "eslint . --ext .ts,.tsx,.cjs,.mjs && bun type-check",
     "lint:fix": "eslint . --fix --ext .ts,.tsx,.cjs,.mjs && bun type-check",
     "precommit": "bun lint-staged",
