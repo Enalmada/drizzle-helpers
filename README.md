@@ -6,7 +6,7 @@ The helpers has 3 components:
 * ORM helpers to simplify single result, pagination, etc
 
 # Getting Started
-Read the [documentation]()
+Read the [documentation](https://drizzle-helpers.vercel.app/guides/getting-started/)
 
 ## Build Notes
 * Using [latest module and target settings](https://stackoverflow.com/questions/72380007/what-typescript-configuration-produces-output-closest-to-node-js-18-capabilities/72380008#72380008) for current LTS  
