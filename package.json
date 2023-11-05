@@ -28,7 +28,7 @@
     "@types/node": "20.8.10",
     "@typescript-eslint/eslint-plugin": "6.8.0",
     "@typescript-eslint/parser": "6.8.0",
-    "bun-types": "1.0.6",
+    "bun-types": "1.0.7",
     "cross-env": "7.0.3",
     "eslint": "8.52.0",
     "eslint-config-prettier": "9.0.0",
