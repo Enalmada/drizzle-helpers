@@ -1,5 +1,12 @@
 # @enalmada/drizzle-helpers
 
+## 0.0.11
+
+### Patch Changes
+
+- 87b8e2f: dependency updates: drizzle@0.29.0,postgres@3.4.3
+- ec8d12b: Updated dependency `lint-staged` to `15.0.2`.
+
 ## 0.0.10
 
 ### Patch Changes
