@@ -31,7 +31,7 @@
     "bun-types": "1.0.12",
     "cross-env": "7.0.3",
     "eslint": "8.53.0",
-    "eslint-config-prettier": "9.0.0",
+    "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.0.1",
     "fixpack": "4.0.0",
     "husky": "8.0.3",
