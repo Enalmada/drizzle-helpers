@@ -1,5 +1,11 @@
 # @enalmada/drizzle-helpers
 
+## 0.0.12
+
+### Patch Changes
+
+- 4888255: updated build process
+
 ## 0.0.11
 
 ### Patch Changes
