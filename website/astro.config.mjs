@@ -51,6 +51,7 @@ export default defineConfig({
           ],
         },
       ],
+      customCss: ['./src/assets/landing.css', './src/tailwind.css'],
     }),
     react(),
     // applyBaseStyles causes lists to not work anymore
