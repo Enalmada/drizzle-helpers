@@ -3,6 +3,14 @@ title: Getting Started
 description: A guide how to use this module.
 ---
 
+## Features
+The helpers module has 3 components:
+* migration script
+* optimized db connection code
+* ORM helpers to simplify single result, pagination, etc
+
+Each of these will have more detail in the following pages.
+
 ## Installation
 
 ```bash

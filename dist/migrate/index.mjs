@@ -1,4 +1,4 @@
-// migratedules/drizzle-orm/sql/funct
+// migratedules/drizzle-orm/column-bu
 var is = function(value, type) {
   if (!value || typeof value !== "object") {
     return false;
@@ -23,7 +23,7 @@ var is = function(value, type) {
 var entityKind = Symbol.for("drizzle:entityKind");
 var hasOwnEntityKind = Symbol.for("drizzle:hasOwnEntityKind");
 
-// migratedules/drizzle-orm/sql/funct
+// migratedules/drizzle-orm/column-bu
 class ConsoleLogWriter {
   static [entityKind] = "ConsoleLogWriter";
   write(message) {
@@ -56,7 +56,7 @@ class NoopLogger {
   }
 }
 
-// migratedules/drizzle-orm/sql/functions/ag
+// migratedules/drizzle-orm/column-builder.j
 class QueryPromise {
   static [entityKind] = "QueryPromise";
   [Symbol.toStringTag] = "QueryPromise";
@@ -77,7 +77,7 @@ class QueryPromise {
   }
 }
 
-// migratedules/drizzle-orm/sql/func
+// migratedules/drizzle-orm/column-b
 var isTable = function(table) {
   return typeof table === "object" && table !== null && IsDrizzleTable in table;
 };
@@ -119,15 +119,15 @@ class Table {
   }
 }
 
-// migratedules/drizzle-orm/sql/functions/ag
+// migratedules/drizzle-orm/column-builder.j
 var iife = function(fn, ...args) {
   return fn(...args);
 };
 
-// migratedules/drizzle-orm/sql/functi
+// migratedules/drizzle-orm/column-bui
 var version = "0.29.1";
 
-// migratedules/drizzle-orm/sql/functi
+// migratedules/drizzle-orm/column-bui
 var otel;
 var rawTracer;
 var tracer = {
@@ -154,7 +154,7 @@ var tracer = {
   }
 };
 
-// migratedules/drizzle-orm/sql/funct
+// migratedules/drizzle-orm/column-bu
 class Column {
   constructor(table, config) {
     this.table = table;
@@ -193,7 +193,7 @@ class Column {
   }
 }
 
-// migratedules/drizzle-orm/sql/functions/ag
+// migratedules/drizzle-orm/column-builder.j
 var InlineForeignKeys = Symbol.for("drizzle:PgInlineForeignKeys");
 
 class PgTable extends Table {
@@ -205,7 +205,7 @@ class PgTable extends Table {
   [Table.Symbol.ExtraConfigBuilder] = undefined;
 }
 
-// migratedules/drizzle-orm/sql/functions/aggregate
+// migratedules/drizzle-orm/column-builder.jsate.co
 class PrimaryKeyBuilder {
   static [entityKind] = "PgPrimaryKeyBuilder";
   columns;
@@ -233,7 +233,7 @@ class PrimaryKey {
   }
 }
 
-// migratedules/drizzle-orm/sql/functions/aggregate.jser.
+// migratedules/drizzle-orm/column-builder.jsate.common.j
 var bindIfParam = function(value, column2) {
   if (isDriverValueEncoder(column2) && !isSQLWrapper(value) && !is(value, Param) && !is(value, Placeholder) && !is(value, Column) && !is(value, Table) && !is(value, View)) {
     return new Param(value, column2);
@@ -338,7 +338,7 @@ var lte = (left, right) => {
   return sql2`${left} <= ${bindIfParam(right, left)}`;
 };
 
-// migratedules/drizzle-orm/sql/functions/aggregate.j
+// migratedules/drizzle-orm/column-builder.jsate.comm
 var asc = function(column2) {
   return sql2`${column2} asc`;
 };
@@ -346,7 +346,7 @@ var desc = function(column2) {
   return sql2`${column2} desc`;
 };
 
-// migratedules/drizzle-orm/sql/function
+// migratedules/drizzle-orm/column-build
 var getOperators = function() {
   return {
     and,
@@ -567,7 +567,7 @@ class Many extends Relation {
   }
 }
 
-// migratedules/drizzle-orm/sql/functio
+// migratedules/drizzle-orm/column-buil
 var SubqueryConfig = Symbol.for("drizzle:SubqueryConfig");
 
 class Subquery {
@@ -587,10 +587,10 @@ class WithSubquery extends Subquery {
   static [entityKind] = "WithSubquery";
 }
 
-// migratedules/drizzle-orm/sql/functions/
+// migratedules/drizzle-orm/column-builder
 var ViewBaseConfig = Symbol.for("drizzle:ViewBaseConfig");
 
-// migratedules/drizzle-orm/sql/functi
+// migratedules/drizzle-orm/column-bui
 var isSQLWrapper = function(value) {
   return typeof value === "object" && value !== null && "getSQL" in value && typeof value.getSQL === "function";
 };
@@ -937,7 +937,7 @@ Subquery.prototype.getSQL = function() {
   return new SQL([this]);
 };
 
-// migratedules/drizzle-orm/sql/func
+// migratedules/drizzle-orm/column-b
 var mapResultRow = function(columns, row, joinsNotNullableMap) {
   const nullifyMap = {};
   const result = columns.reduce((result2, { path, field }, columnIndex) => {
@@ -1036,7 +1036,7 @@ var getTableLikeName = function(table7) {
   return is(table7, Subquery) ? table7[SubqueryConfig].alias : is(table7, View) ? table7[ViewBaseConfig].name : is(table7, SQL) ? undefined : table7[Table.Symbol.IsAlias] ? table7[Table.Symbol.Name] : table7[Table.Symbol.BaseName];
 };
 
-// migratedules/drizzle-orm/sql/functions/aggregate.jser.jsn
+// migratedules/drizzle-orm/column-builder.jsate.common.jssn
 class PgDeleteBase extends QueryPromise {
   constructor(table8, session, dialect) {
     super();
@@ -1079,7 +1079,7 @@ class PgDeleteBase extends QueryPromise {
   }
 }
 
-// migratedules/drizzle-orm/sql/functions/aggregate.jser.jsn
+// migratedules/drizzle-orm/column-builder.jsate.common.jssn
 class PgInsertBuilder {
   constructor(table9, session, dialect) {
     this.table = table9;
@@ -1162,7 +1162,7 @@ class PgInsertBase extends QueryPromise {
   }
 }
 
-// migratedules/drizzle-orm/sql/func
+// migratedules/drizzle-orm/column-b
 var aliasedTable = function(table10, tableAlias) {
   return new Proxy(table10, new TableAliasProxyHandler(tableAlias, false));
 };
@@ -1242,7 +1242,7 @@ class TableAliasProxyHandler {
   }
 }
 
-// migratedules/drizzle-orm/sql/funct
+// migratedules/drizzle-orm/column-bu
 class DrizzleError extends Error {
   static [entityKind] = "DrizzleError";
   constructor({ message, cause }) {
@@ -1259,12 +1259,12 @@ class TransactionRollbackError extends DrizzleError {
   }
 }
 
-// migratedules/drizzle-orm/sql/functions/aggregate.jser
+// migratedules/drizzle-orm/column-builder.jsate.common.
 var uniqueKeyName = function(table11, columns) {
   return `${table11[PgTable.Symbol.Name]}_${columns.join("_")}_unique`;
 };
 
-// migratedules/drizzle-orm/sql/functions/aggregate.j
+// migratedules/drizzle-orm/column-builder.jsate.comm
 class PgColumn extends Column {
   constructor(table11, config) {
     if (!config.uniqueName) {
@@ -1276,7 +1276,7 @@ class PgColumn extends Column {
   static [entityKind] = "PgColumn";
 }
 
-// migratedules/drizzle-orm/sql/functions/aggregate
+// migratedules/drizzle-orm/column-builder.jsate.co
 class PgDate extends PgColumn {
   static [entityKind] = "PgDate";
   getSQLType() {
@@ -1290,7 +1290,7 @@ class PgDate extends PgColumn {
   }
 }
 
-// migratedules/drizzle-orm/sql/functions/aggregate
+// migratedules/drizzle-orm/column-builder.jsate.co
 class PgJson extends PgColumn {
   static [entityKind] = "PgJson";
   constructor(table11, config) {
@@ -1314,7 +1314,7 @@ class PgJson extends PgColumn {
   }
 }
 
-// migratedules/drizzle-orm/sql/functions/aggregate.
+// migratedules/drizzle-orm/column-builder.jsate.com
 class PgJsonb extends PgColumn {
   static [entityKind] = "PgJsonb";
   constructor(table11, config) {
@@ -1338,7 +1338,7 @@ class PgJsonb extends PgColumn {
   }
 }
 
-// migratedules/drizzle-orm/sql/functions/aggregate.js
+// migratedules/drizzle-orm/column-builder.jsate.commo
 class PgNumeric extends PgColumn {
   static [entityKind] = "PgNumeric";
   precision;
@@ -1359,7 +1359,7 @@ class PgNumeric extends PgColumn {
   }
 }
 
-// migratedules/drizzle-orm/sql/functions/aggregate
+// migratedules/drizzle-orm/column-builder.jsate.co
 class PgTime extends PgColumn {
   static [entityKind] = "PgTime";
   withTimezone;
@@ -1375,7 +1375,7 @@ class PgTime extends PgColumn {
   }
 }
 
-// migratedules/drizzle-orm/sql/functions/aggregate.jser
+// migratedules/drizzle-orm/column-builder.jsate.common.
 class PgTimestamp extends PgColumn {
   static [entityKind] = "PgTimestamp";
   withTimezone;
@@ -1397,7 +1397,7 @@ class PgTimestamp extends PgColumn {
   };
 }
 
-// migratedules/drizzle-orm/sql/functions/aggregate
+// migratedules/drizzle-orm/column-builder.jsate.co
 class PgUUID extends PgColumn {
   static [entityKind] = "PgUUID";
   getSQLType() {
@@ -1405,12 +1405,12 @@ class PgUUID extends PgColumn {
   }
 }
 
-// migratedules/drizzle-orm/sql/functions/aggreg
+// migratedules/drizzle-orm/column-builder.jsate
 class PgViewBase extends View {
   static [entityKind] = "PgViewBase";
 }
 
-// migratedules/drizzle-orm/sql/functions/aggr
+// migratedules/drizzle-orm/column-builder.jsa
 class PgDialect {
   static [entityKind] = "PgDialect";
   async migrate(migrations, session) {
@@ -1924,7 +1924,7 @@ class PgDialect {
   }
 }
 
-// migratedules/drizzle-orm/sql/functions/aggregate.jser.js
+// migratedules/drizzle-orm/column-builder.jsate.common.jss
 class TypedQueryBuilder {
   static [entityKind] = "TypedQueryBuilder";
   getSelectedFields() {
@@ -1932,7 +1932,7 @@ class TypedQueryBuilder {
   }
 }
 
-// migratedules/drizzle-orm/sql/functions/aggr
+// migratedules/drizzle-orm/column-builder.jsa
 class SelectionProxyHandler {
   static [entityKind] = "SelectionProxyHandler";
   config;
@@ -1984,7 +1984,7 @@ class SelectionProxyHandler {
   }
 }
 
-// migratedules/drizzle-orm/sql/functions/aggregate.jser.jsn
+// migratedules/drizzle-orm/column-builder.jsate.common.jssn
 var createSetOperator = function(type, isAll) {
   return (leftSelect, rightSelect, ...restSelects) => {
     const setOperators = [rightSelect, ...restSelects].map((select) => ({
@@ -2263,7 +2263,7 @@ var intersectAll = createSetOperator("intersect", true);
 var except = createSetOperator("except", false);
 var exceptAll = createSetOperator("except", true);
 
-// migratedules/drizzle-orm/sql/functions/aggregate.jser.jsn.js.jss
+// migratedules/drizzle-orm/column-builder.jsate.common.jssn.js.jss
 class QueryBuilder {
   static [entityKind] = "PgQueryBuilder";
   dialect;
@@ -2337,7 +2337,7 @@ class QueryBuilder {
   }
 }
 
-// migratedules/drizzle-orm/sql/functions/aggregate.jser.jsn.js.jssized-view.js
+// migratedules/drizzle-orm/column-builder.jsate.common.jssn.js.jssized-view.js
 class PgRefreshMaterializedView extends QueryPromise {
   constructor(view, session, dialect2) {
     super();
@@ -2383,7 +2383,7 @@ class PgRefreshMaterializedView extends QueryPromise {
   };
 }
 
-// migratedules/drizzle-orm/sql/functions/aggregate.jser.jsn
+// migratedules/drizzle-orm/column-builder.jsate.common.jssn
 class PgUpdateBuilder {
   constructor(table15, session, dialect2) {
     this.table = table15;
@@ -2434,7 +2434,7 @@ class PgUpdateBase extends QueryPromise {
   }
 }
 
-// migratedules/drizzle-orm/sql/functions/aggregate.jser.js
+// migratedules/drizzle-orm/column-builder.jsate.common.jss
 class RelationalQueryBuilder {
   constructor(fullSchema, schema, tableNamesMap, table15, tableConfig, dialect2, session) {
     this.fullSchema = fullSchema;
@@ -2512,7 +2512,7 @@ class PgRelationalQuery extends QueryPromise {
   }
 }
 
-// migratedules/drizzle-orm/sql/functions
+// migratedules/drizzle-orm/column-builde
 class PgDatabase {
   constructor(dialect2, session, schema) {
     this.dialect = dialect2;
@@ -2592,7 +2592,7 @@ class PgDatabase {
   }
 }
 
-// migratedules/drizzle-orm/sql/functions/aggr
+// migratedules/drizzle-orm/column-builder.jsa
 class PreparedQuery {
   static [entityKind] = "PgPreparedQuery";
   joinsNotNullableMap;
@@ -2644,7 +2644,7 @@ class PgTransaction extends PgDatabase {
   }
 }
 
-// migratedules/drizzle-orm/sql/functions/aggregat
+// migratedules/drizzle-orm/column-builder.jsate.c
 class PostgresJsPreparedQuery extends PreparedQuery {
   constructor(client, query2, params, logger2, fields, customResultMapper) {
     super();
@@ -2748,7 +2748,7 @@ class PostgresJsTransaction extends PgTransaction {
   }
 }
 
-// migratedules/drizzle-orm/sql/functions/aggrega
+// migratedules/drizzle-orm/column-builder.jsate.
 var drizzle = function(client, config = {}) {
   const dialect3 = new PgDialect;
   let logger3;
@@ -2770,7 +2770,7 @@ var drizzle = function(client, config = {}) {
   return new PgDatabase(dialect3, session3, schema);
 };
 
-// migratedules/drizzle-orm/sql/functio
+// migratedules/drizzle-orm/column-buil
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
@@ -2813,17 +2813,17 @@ var readMigrationFiles = function(config) {
   return migrationQueries;
 };
 
-// migratedules/drizzle-orm/sql/functions/aggregate
+// migratedules/drizzle-orm/column-builder.jsate.co
 async function migrate(db3, config) {
   const migrations = readMigrationFiles(config);
   await db3.dialect.migrate(migrations, db3.session);
 }
 
-// migratedules/drizzle-orm/sql/funct
+// migratedules/drizzle-orm/column-bu
 import os from "os";
 import fs2 from "fs";
 
-// migratedules/drizzle-orm/sql/funct
+// migratedules/drizzle-orm/column-bu
 var cachedError = function(xs) {
   if (originCache.has(xs))
     return originCache.get(xs);
@@ -2961,7 +2961,7 @@ class Query extends Promise {
   }
 }
 
-// migratedules/drizzle-orm/sql/functi
+// migratedules/drizzle-orm/column-bui
 var connection = function(x, options, socket) {
   const { host, port } = socket || options;
   const error = Object.assign(new Error("write " + x + " " + (options.path || host + ":" + port)), {
@@ -3005,7 +3005,7 @@ var Errors = {
   notSupported
 };
 
-// migratedules/drizzle-orm/sql/funct
+// migratedules/drizzle-orm/column-bu
 function handleValue(x, parameters, types, options) {
   let value = x instanceof Parameter ? x.value : x;
   if (value === undefined) {
@@ -3286,14 +3286,14 @@ fromKebab.column = { to: fromKebab };
 var kebab = { ...toKebab };
 kebab.column.to = fromKebab;
 
-// migratedules/drizzle-orm/sql/functions/
+// migratedules/drizzle-orm/column-builder
 import net from "net";
 import tls from "tls";
 import crypto2 from "crypto";
 import Stream from "stream";
 import {performance} from "perf_hooks";
 
-// migratedules/drizzle-orm/sql/functi
+// migratedules/drizzle-orm/column-bui
 class Result extends Array {
   constructor() {
     super();
@@ -3310,7 +3310,7 @@ class Result extends Array {
   }
 }
 
-// migratedules/drizzle-orm/sql/funct
+// migratedules/drizzle-orm/column-bu
 var Queue = function(initial = []) {
   let xs = initial.slice();
   let index = 0;
@@ -3337,7 +3337,7 @@ var Queue = function(initial = []) {
 };
 var queue_default = Queue;
 
-// migratedules/drizzle-orm/sql/funct
+// migratedules/drizzle-orm/column-bu
 var fit = function(x) {
   if (buffer.length - b.i < x) {
     const prev = buffer, length = prev.length;
@@ -3410,7 +3410,7 @@ var b = Object.assign(reset, messages, {
 });
 var bytes_default = b;
 
-// migratedules/drizzle-orm/sql/functions/
+// migratedules/drizzle-orm/column-builder
 var Connection = function(options, queues = {}, { onopen = noop, onend = noop, onclose = noop } = {}) {
   const {
     ssl,
@@ -4110,7 +4110,7 @@ var errorFields = {
   82: "routine"
 };
 
-// migratedules/drizzle-orm/sql/functions
+// migratedules/drizzle-orm/column-builde
 var Time = function(x) {
   return new Date(Date.UTC(2000, 0, 1) + Number(x / BigInt(1000)));
 };
@@ -4308,7 +4308,7 @@ function Subscribe(postgres2, options) {
   }
 }
 
-// migratedules/drizzle-orm/sql/funct
+// migratedules/drizzle-orm/column-bu
 import Stream2 from "stream";
 function largeObject(sql15, oid, mode = 131072 | 262144) {
   return new Promise(async (resolve, reject) => {
@@ -4374,7 +4374,7 @@ function largeObject(sql15, oid, mode = 131072 | 262144) {
   });
 }
 
-// migratedules/drizzle-orm/sql/funct
+// migratedules/drizzle-orm/column-bu
 var Postgres = function(a, b2) {
   const options = parseOptions(a, b2), subscribe2 = options.no_subscribe || Subscribe(Postgres, { ...options });
   let ending = false;
