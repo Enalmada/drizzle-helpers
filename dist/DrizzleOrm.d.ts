@@ -20,15 +20,16 @@ export interface Page<T> {
     result: T[];
     hasMore: boolean;
 }
+export interface IRepository<T, TI> {
+    findFirst(criteria: Partial<T>): Promise<T>;
+    findMany(config?: Config<T>): Promise<T[]>;
+    findPage(config?: Config<T>): Promise<Page<T>>;
+    create(createWith: TI): Promise<T>;
+    update(id: string, updateWith: TI): Promise<T>;
+    delete(id: string): Promise<T>;
+}
 export declare const createRepo: <TSchema extends Record<string, unknown>, T extends {
     [key: string]: any;
 }, TI extends {
     [key: string]: any;
-}>(db: PostgresJsDatabase<TSchema>, table: PgTableWithColumns<any>, queryBuilder: RelationalQueryBuilder<T, any>) => {
-    findFirst: (criteria: Partial<T>) => Promise<T>;
-    findMany: (config?: Config<T> | undefined) => Promise<T[]>;
-    findPage: (config?: Config<T> | undefined) => Promise<Page<T>>;
-    create: (createWith: TI) => Promise<T>;
-    update: (id: string, updateWith: TI) => Promise<T>;
-    delete: (id: string) => Promise<T>;
-};
+}>(db: PostgresJsDatabase<TSchema>, table: PgTableWithColumns<any>, queryBuilder: RelationalQueryBuilder<T, any>) => IRepository<T, TI>;
