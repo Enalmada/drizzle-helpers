@@ -1,5 +1,11 @@
 # @enalmada/drizzle-helpers
 
+## 0.0.13
+
+### Patch Changes
+
+- 5abe176: interface for orm
+
 ## 0.0.12
 
 ### Patch Changes
