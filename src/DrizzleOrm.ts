@@ -63,6 +63,15 @@ export interface Page<T> {
 
 const DEFAULT_PAGE_SIZE = 20;
 
+export interface IRepository<T, TI> {
+  findFirst(criteria: Partial<T>): Promise<T>;
+  findMany(config?: Config<T>): Promise<T[]>;
+  findPage(config?: Config<T>): Promise<Page<T>>;
+  create(createWith: TI): Promise<T>;
+  update(id: string, updateWith: TI): Promise<T>;
+  delete(id: string): Promise<T>;
+}
+
 export const createRepo = <
   TSchema extends Record<string, unknown>,
   T extends { [key: string]: any },
@@ -71,7 +80,7 @@ export const createRepo = <
   db: PostgresJsDatabase<TSchema>, // replace with the appropriate type for db
   table: PgTableWithColumns<any>,
   queryBuilder: RelationalQueryBuilder<T, any>
-) => {
+): IRepository<T, TI> => {
   const queryMany = async (
     table: PgTableWithColumns<any>,
     queryBuilder: RelationalQueryBuilder<T, any>,

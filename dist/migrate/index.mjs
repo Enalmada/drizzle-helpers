@@ -1036,7 +1036,7 @@ var getTableLikeName = function(table7) {
   return is(table7, Subquery) ? table7[SubqueryConfig].alias : is(table7, View) ? table7[ViewBaseConfig].name : is(table7, SQL) ? undefined : table7[Table.Symbol.IsAlias] ? table7[Table.Symbol.Name] : table7[Table.Symbol.BaseName];
 };
 
-// migratedules/drizzle-orm/column-builder.jsate.common.jssn
+// migratedules/drizzle-orm/column-builder.jsate.common.json
 class PgDeleteBase extends QueryPromise {
   constructor(table8, session, dialect) {
     super();
@@ -1079,7 +1079,7 @@ class PgDeleteBase extends QueryPromise {
   }
 }
 
-// migratedules/drizzle-orm/column-builder.jsate.common.jssn
+// migratedules/drizzle-orm/column-builder.jsate.common.json
 class PgInsertBuilder {
   constructor(table9, session, dialect) {
     this.table = table9;
@@ -1924,7 +1924,7 @@ class PgDialect {
   }
 }
 
-// migratedules/drizzle-orm/column-builder.jsate.common.jss
+// migratedules/drizzle-orm/column-builder.jsate.common.jso
 class TypedQueryBuilder {
   static [entityKind] = "TypedQueryBuilder";
   getSelectedFields() {
@@ -1984,7 +1984,7 @@ class SelectionProxyHandler {
   }
 }
 
-// migratedules/drizzle-orm/column-builder.jsate.common.jssn
+// migratedules/drizzle-orm/column-builder.jsate.common.json
 var createSetOperator = function(type, isAll) {
   return (leftSelect, rightSelect, ...restSelects) => {
     const setOperators = [rightSelect, ...restSelects].map((select) => ({
@@ -2263,7 +2263,7 @@ var intersectAll = createSetOperator("intersect", true);
 var except = createSetOperator("except", false);
 var exceptAll = createSetOperator("except", true);
 
-// migratedules/drizzle-orm/column-builder.jsate.common.jssn.js.jss
+// migratedules/drizzle-orm/column-builder.jsate.common.json.js.jss
 class QueryBuilder {
   static [entityKind] = "PgQueryBuilder";
   dialect;
@@ -2337,7 +2337,7 @@ class QueryBuilder {
   }
 }
 
-// migratedules/drizzle-orm/column-builder.jsate.common.jssn.js.jssized-view.js
+// migratedules/drizzle-orm/column-builder.jsate.common.json.js.jssized-view.js
 class PgRefreshMaterializedView extends QueryPromise {
   constructor(view, session, dialect2) {
     super();
@@ -2383,7 +2383,7 @@ class PgRefreshMaterializedView extends QueryPromise {
   };
 }
 
-// migratedules/drizzle-orm/column-builder.jsate.common.jssn
+// migratedules/drizzle-orm/column-builder.jsate.common.json
 class PgUpdateBuilder {
   constructor(table15, session, dialect2) {
     this.table = table15;
@@ -2434,7 +2434,7 @@ class PgUpdateBase extends QueryPromise {
   }
 }
 
-// migratedules/drizzle-orm/column-builder.jsate.common.jss
+// migratedules/drizzle-orm/column-builder.jsate.common.jso
 class RelationalQueryBuilder {
   constructor(fullSchema, schema, tableNamesMap, table15, tableConfig, dialect2, session) {
     this.fullSchema = fullSchema;

@@ -9,6 +9,8 @@ The helpers module has 3 components:
 * optimized db connection code
 * ORM helpers to simplify single result, pagination, etc
 
+See this in action at [nextjs-boilerplate](https://github.com/Enalmada/nextjs-boilerplate)
+
 Each of these will have more detail in the following pages.
 
 ## Installation
