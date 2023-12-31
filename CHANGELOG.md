@@ -1,5 +1,11 @@
 # @enalmada/drizzle-helpers
 
+## 0.0.14
+
+### Patch Changes
+
+- 0b10ac0: dependency updates
+
 ## 0.0.13
 
 ### Patch Changes
