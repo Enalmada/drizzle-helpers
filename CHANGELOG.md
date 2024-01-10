@@ -1,5 +1,11 @@
 # @enalmada/drizzle-helpers
 
+## 0.0.15
+
+### Patch Changes
+
+- 0d68bbe: support with
+
 ## 0.0.14
 
 ### Patch Changes
