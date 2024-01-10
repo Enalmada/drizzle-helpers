@@ -7,5 +7,6 @@ const buildEslintCommand = (filenames) =>
 
 export default {
     '**/*.{ts,tsx,mjs,cjs}': [buildEslintCommand, tsc],
+    '**/*.{ts,tsx}': [tsc],
     './package.json': ['npm pkg fix', 'fixpack'],
 };
