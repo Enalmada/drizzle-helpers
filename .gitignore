@@ -9,3 +9,6 @@ lib
 tmp
 package-lock.json
 .vercel
+
+# Turborepo
+.turbo

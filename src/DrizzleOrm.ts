@@ -3,6 +3,7 @@ import { and, asc, desc, eq } from 'drizzle-orm';
 import { type PgTableWithColumns } from 'drizzle-orm/pg-core';
 import { type RelationalQueryBuilder } from 'drizzle-orm/pg-core/query-builders/query';
 import { type PostgresJsDatabase } from 'drizzle-orm/postgres-js';
+import { type KnownKeysOnly } from 'drizzle-orm/utils';
 
 type CriteriaType<T> = keyof T;
 
@@ -48,12 +49,13 @@ export interface Paging {
   pageSize: number;
 }
 
-export interface Config<T> {
+export interface Config<T> extends KnownKeysOnly<any, any> {
   criteria?: Partial<T>;
   order?: OrderBy;
   paging?: Paging;
   limit?: number;
   offset?: number;
+  with?: Record<string, any>;
 }
 
 export interface Page<T> {
@@ -64,7 +66,7 @@ export interface Page<T> {
 const DEFAULT_PAGE_SIZE = 20;
 
 export interface IRepository<T, TI> {
-  findFirst(criteria: Partial<T>): Promise<T>;
+  findFirst(criteria: Partial<T>, config?: Config<T>): Promise<T>;
   findMany(config?: Config<T>): Promise<T[]>;
   findPage(config?: Config<T>): Promise<Page<T>>;
   create(createWith: TI): Promise<T>;
@@ -94,13 +96,14 @@ export const createRepo = <
       orderBy,
       limit: config?.limit,
       offset: config?.offset,
+      with: config?.with,
     }) as unknown as Promise<T[]>;
   };
 
   return {
-    findFirst: async (criteria: Partial<T>): Promise<T> => {
+    findFirst: async (criteria: Partial<T>, config?: Config<T>): Promise<T> => {
       const where = buildWhereClause(table, criteria);
-      return queryBuilder.findFirst({ where }) as unknown as Promise<T>;
+      return queryBuilder.findFirst({ where, with: config?.with }) as unknown as Promise<T>;
     },
     findMany: async (config?: Config<T>): Promise<T[]> => {
       return queryMany(table, queryBuilder, config);

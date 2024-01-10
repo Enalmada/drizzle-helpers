@@ -29,13 +29,14 @@ var createRepo = (db, table, queryBuilder) => {
       where,
       orderBy,
       limit: config?.limit,
-      offset: config?.offset
+      offset: config?.offset,
+      with: config?.with
     });
   };
   return {
-    findFirst: async (criteria) => {
+    findFirst: async (criteria, config) => {
       const where = buildWhereClause(table, criteria);
-      return queryBuilder.findFirst({ where });
+      return queryBuilder.findFirst({ where, with: config?.with });
     },
     findMany: async (config) => {
       return queryMany(table, queryBuilder, config);
