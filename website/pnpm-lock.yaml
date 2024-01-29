@@ -15,11 +15,11 @@ dependencies:
     specifier: ^3.0.8
     version: 3.0.8(@types/react-dom@18.2.18)(@types/react@18.2.45)(react-dom@18.2.0)(react@18.2.0)(vite@5.0.10)
   '@astrojs/starlight':
-    specifier: ^0.16.0
-    version: 0.16.0(astro@4.0.7)
+    specifier: ^0.17.0
+    version: 0.17.0(astro@4.0.7)
   '@astrojs/starlight-tailwind':
     specifier: ^2.0.1
-    version: 2.0.1(@astrojs/starlight@0.16.0)(@astrojs/tailwind@5.0.4)(tailwindcss@3.4.0)
+    version: 2.0.1(@astrojs/starlight@0.17.0)(@astrojs/tailwind@5.0.4)(tailwindcss@3.4.0)
   '@astrojs/tailwind':
     specifier: ^5.0.4
     version: 5.0.4(astro@4.0.7)(tailwindcss@3.4.0)
@@ -235,20 +235,20 @@ packages:
       zod: 3.22.4
     dev: false
 
-  /@astrojs/starlight-tailwind@2.0.1(@astrojs/starlight@0.16.0)(@astrojs/tailwind@5.0.4)(tailwindcss@3.4.0):
+  /@astrojs/starlight-tailwind@2.0.1(@astrojs/starlight@0.17.0)(@astrojs/tailwind@5.0.4)(tailwindcss@3.4.0):
     resolution: {integrity: sha512-niMgFcR7NHcsBVy8UAN3F2gqhmoN5v83st5Hu4YzvUL+6SNwjQmIipXppXdN9+iVneRjPr6PLGzDfI+wnjSBWQ==}
     peerDependencies:
       '@astrojs/starlight': '>=0.9.0'
       '@astrojs/tailwind': ^5.0.0
       tailwindcss: ^3.3.3
     dependencies:
-      '@astrojs/starlight': 0.16.0(astro@4.0.7)
+      '@astrojs/starlight': 0.17.0(astro@4.0.7)
       '@astrojs/tailwind': 5.0.4(astro@4.0.7)(tailwindcss@3.4.0)
       tailwindcss: 3.4.0
     dev: false
 
-  /@astrojs/starlight@0.16.0(astro@4.0.7):
-    resolution: {integrity: sha512-zwSNiCqzZeiuivUp4Yhx+eMLGww8v8cRYoCYXg9myTXNUwphqPaVG3rp7dbaZ4y1MaejnjYWB444ZRItEgTDcQ==}
+  /@astrojs/starlight@0.17.0(astro@4.0.7):
+    resolution: {integrity: sha512-a2s+x/5r0v7S5jERC91IuEqV+PXDUlFNVDJPrcbpjx0xaqvg4TezL1K3gWCptfHO1mUE9ikQ8vaArbNbgFVb/g==}
     peerDependencies:
       astro: ^4.0.0
     dependencies:
@@ -258,7 +258,7 @@ packages:
       '@types/hast': 3.0.3
       '@types/mdast': 4.0.3
       astro: 4.0.7(typescript@5.3.3)
-      astro-expressive-code: 0.31.0(astro@4.0.7)
+      astro-expressive-code: 0.32.3(astro@4.0.7)
       bcp-47: 2.1.0
       hast-util-select: 6.0.2
       hastscript: 8.0.0
@@ -778,8 +778,8 @@ packages:
     dev: false
     optional: true
 
-  /@expressive-code/core@0.31.0:
-    resolution: {integrity: sha512-zeCuojWRYeFs0UDOhzpKMzpjI/tJPCQna4jcVp5SJLMn4qNtHXgVmz3AngoMFoFcAlK6meE3wxzy//0d6K4NPw==}
+  /@expressive-code/core@0.32.3:
+    resolution: {integrity: sha512-uVA0/VMWz9Ak454CL8C74kvIikr7dwz2pCajSRVxR2wR+3NrgkRjbbny101f24uSs+s4k6YorJYrvX2p4SfQuA==}
     dependencies:
       '@ctrl/tinycolor': 3.6.1
       hast-util-to-html: 8.0.4
@@ -788,24 +788,24 @@ packages:
       postcss-nested: 6.0.1(postcss@8.4.32)
     dev: false
 
-  /@expressive-code/plugin-frames@0.31.0:
-    resolution: {integrity: sha512-eYWfK3i4w2gSpOGBFNnu05JKSXC90APgUNdam8y5i0Ie2CVAwpxDtEp0NRqugvEKC0aMJe6ZmHN5Hu2WAVJmig==}
+  /@expressive-code/plugin-frames@0.32.3:
+    resolution: {integrity: sha512-esgCg+EE9IyTTXhyTdCOfTr9gcXp4VuigfHhitmoGgfQXSBVnmiVDWdSSD2XTeu/xzIGM7HvSj/l7P/dsdEUxA==}
     dependencies:
-      '@expressive-code/core': 0.31.0
+      '@expressive-code/core': 0.32.3
       hastscript: 7.2.0
     dev: false
 
-  /@expressive-code/plugin-shiki@0.31.0:
-    resolution: {integrity: sha512-fU5wPPfV1LGcS+Z1wcEkzI1fzBq9IAdt0DN0ni8sT7E+gpkULda4GA4IFD9iWKCGIhSDsBbG+bjc9hrYoJsDIQ==}
+  /@expressive-code/plugin-shiki@0.32.3:
+    resolution: {integrity: sha512-pEiOtlkmpWp1nRAPLbW7gzeMMFqjCCTR+SHGsXOy3hx0Sq0fIf+ZZ8AGRHxW61k/5YdHiS1FMBYs3mXrEdtvxg==}
     dependencies:
-      '@expressive-code/core': 0.31.0
+      '@expressive-code/core': 0.32.3
       shikiji: 0.8.7
     dev: false
 
-  /@expressive-code/plugin-text-markers@0.31.0:
-    resolution: {integrity: sha512-32o3pPMBq6bVUfRsAfFyqNpHbD1Z3iftoX9yt95F5zakLMsmHzZL4f0jyNr8XpXe7qcTnl0kIijBkUpvS6Pxfg==}
+  /@expressive-code/plugin-text-markers@0.32.3:
+    resolution: {integrity: sha512-7KdTxpNz49aj2GBGyE9vp0Dlv+vJD2zWiEk76uGNXCyahDjFM3si+Mpey313cqRHfOHgOaB8a5sDJNbLpra37w==}
     dependencies:
-      '@expressive-code/core': 0.31.0
+      '@expressive-code/core': 0.32.3
       hastscript: 7.2.0
       unist-util-visit-parents: 5.1.3
     dev: false
@@ -1528,13 +1528,14 @@ packages:
     hasBin: true
     dev: false
 
-  /astro-expressive-code@0.31.0(astro@4.0.7):
-    resolution: {integrity: sha512-o6eFrRSYLnlM/2FKkO3MgkbmVxT8N6DJcKvbRf1wbUcRXpz7s1KfugbdsaGw3ABEWUBuQIBsRppcGGw2L816Vg==}
+  /astro-expressive-code@0.32.3(astro@4.0.7):
+    resolution: {integrity: sha512-XeBEmtd9ZoGJkTqrEAJkODauqMpe0GrhpPStW1WKjxQN2ym4P1/qLCA6IFEqOfQwe1958BlfvoJ0N3UT2mrX/A==}
     peerDependencies:
       astro: ^3.3.0 || ^4.0.0-beta
     dependencies:
       astro: 4.0.7(typescript@5.3.3)
-      remark-expressive-code: 0.31.0
+      hast-util-to-html: 8.0.4
+      remark-expressive-code: 0.32.3
     dev: false
 
   /astro@4.0.7(typescript@5.3.3):
@@ -2215,13 +2216,13 @@ packages:
     dev: false
     optional: true
 
-  /expressive-code@0.31.0:
-    resolution: {integrity: sha512-rxKGYS8iRwNUbRNfyCyoe3XQvBLTtGdXbNKM+ODDWCn4VL2DVT1gD1M2N2Alg8HQHIWZJsZIMsYbziO0MRjPlw==}
+  /expressive-code@0.32.3:
+    resolution: {integrity: sha512-FqDIFugTvVCAKWzcgNT4PH7s6s/ITJbRbW8MLHLBbDhcErkMExGImYMkGyDblLDaIHS5vRQi735hW8bDl72/ow==}
     dependencies:
-      '@expressive-code/core': 0.31.0
-      '@expressive-code/plugin-frames': 0.31.0
-      '@expressive-code/plugin-shiki': 0.31.0
-      '@expressive-code/plugin-text-markers': 0.31.0
+      '@expressive-code/core': 0.32.3
+      '@expressive-code/plugin-frames': 0.32.3
+      '@expressive-code/plugin-shiki': 0.32.3
+      '@expressive-code/plugin-text-markers': 0.32.3
     dev: false
 
   /extend-shallow@2.0.1:
@@ -4155,10 +4156,10 @@ packages:
       - supports-color
     dev: false
 
-  /remark-expressive-code@0.31.0:
-    resolution: {integrity: sha512-ZnKXo9lB0kBUHZIlw2NdqMMgXriVVajEhtQfJ+MWeibMpyM1kuOa28jefNfNFd3FAoNPrc/A3M0fDRkYvWw9Gw==}
+  /remark-expressive-code@0.32.3:
+    resolution: {integrity: sha512-HSTdZ4AcOXugRK/3DStaslx9D35HhM1OlbWxdNXYU0QoJYq/Bv96eIKZaZmqd8WfTMUofvkVMhTqAppNMuf6Pw==}
     dependencies:
-      expressive-code: 0.31.0
+      expressive-code: 0.32.3
       hast-util-to-html: 8.0.4
       unist-util-visit: 4.1.2
     dev: false
