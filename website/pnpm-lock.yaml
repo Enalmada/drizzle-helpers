@@ -15,11 +15,11 @@ dependencies:
     specifier: ^3.0.8
     version: 3.0.8(@types/react-dom@18.2.18)(@types/react@18.2.45)(react-dom@18.2.0)(react@18.2.0)(vite@5.0.10)
   '@astrojs/starlight':
-    specifier: ^0.17.0
-    version: 0.17.0(astro@4.0.7)
+    specifier: ^0.18.0
+    version: 0.18.0(astro@4.0.7)
   '@astrojs/starlight-tailwind':
     specifier: ^2.0.1
-    version: 2.0.1(@astrojs/starlight@0.17.0)(@astrojs/tailwind@5.0.4)(tailwindcss@3.4.0)
+    version: 2.0.1(@astrojs/starlight@0.18.0)(@astrojs/tailwind@5.0.4)(tailwindcss@3.4.0)
   '@astrojs/tailwind':
     specifier: ^5.0.4
     version: 5.0.4(astro@4.0.7)(tailwindcss@3.4.0)
@@ -145,8 +145,8 @@ packages:
       - supports-color
     dev: false
 
-  /@astrojs/markdown-remark@4.2.0:
-    resolution: {integrity: sha512-qQB+LoxmIqzkhLXaQAzfzlBxZU1jeQYailsifurz89WeY0Q8ywIj8uQQSyqxb7rPPg3ZfdNdxsN9lF5UaCRn0w==}
+  /@astrojs/markdown-remark@4.2.1:
+    resolution: {integrity: sha512-2RQBIwrq+2qPYtp99bH+eL5hfbK0BoxXla85lHsRpIX/IsGqFrPX6pXI2cbWPihBwGbKCdxS6uZNX2QerZWwpQ==}
     dependencies:
       '@astrojs/prism': 3.0.0
       github-slugger: 2.0.0
@@ -166,13 +166,13 @@ packages:
       - supports-color
     dev: false
 
-  /@astrojs/mdx@2.0.6(astro@4.0.7):
-    resolution: {integrity: sha512-PY6FYN5TN8dsRFSzcPIt5ofJ/w+v+5GtUUyDYbznu8zmFWlL9TkTLJ9U1zaQ3s2Qh6r1cAeLdEYjW/hW+vZzlw==}
+  /@astrojs/mdx@2.1.1(astro@4.0.7):
+    resolution: {integrity: sha512-AgGFdE7HOGmoFooGvMSatkA9FiSKwyVW7ImHot/bXJ6uAbFfu6iG2ht18Cf1pT22Hda/6iSCGWusFvBv0/EnKQ==}
     engines: {node: '>=18.14.1'}
     peerDependencies:
       astro: ^4.0.0
     dependencies:
-      '@astrojs/markdown-remark': 4.2.0
+      '@astrojs/markdown-remark': 4.2.1
       '@mdx-js/mdx': 3.0.0
       acorn: 8.11.2
       astro: 4.0.7(typescript@5.3.3)
@@ -233,30 +233,30 @@ packages:
       zod: 3.22.4
     dev: false
 
-  /@astrojs/starlight-tailwind@2.0.1(@astrojs/starlight@0.17.0)(@astrojs/tailwind@5.0.4)(tailwindcss@3.4.0):
+  /@astrojs/starlight-tailwind@2.0.1(@astrojs/starlight@0.18.0)(@astrojs/tailwind@5.0.4)(tailwindcss@3.4.0):
     resolution: {integrity: sha512-niMgFcR7NHcsBVy8UAN3F2gqhmoN5v83st5Hu4YzvUL+6SNwjQmIipXppXdN9+iVneRjPr6PLGzDfI+wnjSBWQ==}
     peerDependencies:
       '@astrojs/starlight': '>=0.9.0'
       '@astrojs/tailwind': ^5.0.0
       tailwindcss: ^3.3.3
     dependencies:
-      '@astrojs/starlight': 0.17.0(astro@4.0.7)
+      '@astrojs/starlight': 0.18.0(astro@4.0.7)
       '@astrojs/tailwind': 5.0.4(astro@4.0.7)(tailwindcss@3.4.0)
       tailwindcss: 3.4.0
     dev: false
 
-  /@astrojs/starlight@0.17.0(astro@4.0.7):
-    resolution: {integrity: sha512-a2s+x/5r0v7S5jERC91IuEqV+PXDUlFNVDJPrcbpjx0xaqvg4TezL1K3gWCptfHO1mUE9ikQ8vaArbNbgFVb/g==}
+  /@astrojs/starlight@0.18.0(astro@4.0.7):
+    resolution: {integrity: sha512-pEYcuSf+t8aHJZQzGKJfgHGQpidrtifDqWE0jZevADpR+JJhyK2LXWhcOYCZiqDUil28FZmVr+/FrA3Dnw8xQQ==}
     peerDependencies:
-      astro: ^4.0.0
+      astro: ^4.2.7
     dependencies:
-      '@astrojs/mdx': 2.0.6(astro@4.0.7)
+      '@astrojs/mdx': 2.1.1(astro@4.0.7)
       '@astrojs/sitemap': 3.0.5
       '@pagefind/default-ui': 1.0.4
       '@types/hast': 3.0.3
       '@types/mdast': 4.0.3
       astro: 4.0.7(typescript@5.3.3)
-      astro-expressive-code: 0.32.3(astro@4.0.7)
+      astro-expressive-code: 0.32.4(astro@4.0.7)
       bcp-47: 2.1.0
       hast-util-select: 6.0.2
       hastscript: 8.0.0
@@ -776,8 +776,8 @@ packages:
     dev: false
     optional: true
 
-  /@expressive-code/core@0.32.3:
-    resolution: {integrity: sha512-uVA0/VMWz9Ak454CL8C74kvIikr7dwz2pCajSRVxR2wR+3NrgkRjbbny101f24uSs+s4k6YorJYrvX2p4SfQuA==}
+  /@expressive-code/core@0.32.4:
+    resolution: {integrity: sha512-S0OwgZCy29OCcwFUBTLDrShUovIUWZcQn3EvSoKsGfzf/wTisK7XqZ1uH0Y7Mlof3Hf9uJMjOhJZvxTLtQUdSQ==}
     dependencies:
       '@ctrl/tinycolor': 3.6.1
       hast-util-to-html: 8.0.4
@@ -786,24 +786,24 @@ packages:
       postcss-nested: 6.0.1(postcss@8.4.32)
     dev: false
 
-  /@expressive-code/plugin-frames@0.32.3:
-    resolution: {integrity: sha512-esgCg+EE9IyTTXhyTdCOfTr9gcXp4VuigfHhitmoGgfQXSBVnmiVDWdSSD2XTeu/xzIGM7HvSj/l7P/dsdEUxA==}
+  /@expressive-code/plugin-frames@0.32.4:
+    resolution: {integrity: sha512-XOQrLqlVEy5JbqsBhDcSJQinceQ5j/Z8cE0/27Lnlcj4oXRdiQNjMVtstC/xZUeWEbm+FI9ZZP4Z9yihol61Aw==}
     dependencies:
-      '@expressive-code/core': 0.32.3
+      '@expressive-code/core': 0.32.4
       hastscript: 7.2.0
     dev: false
 
-  /@expressive-code/plugin-shiki@0.32.3:
-    resolution: {integrity: sha512-pEiOtlkmpWp1nRAPLbW7gzeMMFqjCCTR+SHGsXOy3hx0Sq0fIf+ZZ8AGRHxW61k/5YdHiS1FMBYs3mXrEdtvxg==}
+  /@expressive-code/plugin-shiki@0.32.4:
+    resolution: {integrity: sha512-zZzTXFFTpG+fmBG6C+4KzIyh1nFPdn4gLJ8E9LhBVufmRkn3gZplkE99lulfillsKyUZTRw3+dC3xYZWEZKzPw==}
     dependencies:
-      '@expressive-code/core': 0.32.3
+      '@expressive-code/core': 0.32.4
       shikiji: 0.8.7
     dev: false
 
-  /@expressive-code/plugin-text-markers@0.32.3:
-    resolution: {integrity: sha512-7KdTxpNz49aj2GBGyE9vp0Dlv+vJD2zWiEk76uGNXCyahDjFM3si+Mpey313cqRHfOHgOaB8a5sDJNbLpra37w==}
+  /@expressive-code/plugin-text-markers@0.32.4:
+    resolution: {integrity: sha512-lFlo3uwTp7vUmfXtLPn2aXs0CPFqdFvKiR3y8gtNzmBeYWPqVahF4RFUCN9ZpztCmXp5V8p2ADvNHzoNwCBwzA==}
     dependencies:
-      '@expressive-code/core': 0.32.3
+      '@expressive-code/core': 0.32.4
       hastscript: 7.2.0
       unist-util-visit-parents: 5.1.3
     dev: false
@@ -1534,14 +1534,14 @@ packages:
     hasBin: true
     dev: false
 
-  /astro-expressive-code@0.32.3(astro@4.0.7):
-    resolution: {integrity: sha512-XeBEmtd9ZoGJkTqrEAJkODauqMpe0GrhpPStW1WKjxQN2ym4P1/qLCA6IFEqOfQwe1958BlfvoJ0N3UT2mrX/A==}
+  /astro-expressive-code@0.32.4(astro@4.0.7):
+    resolution: {integrity: sha512-/Kq8wLMz0X2gbLWGmPryqEdFV/om/GROsoLtPFqLrLCRD5CpwxXAW185BIGZKf4iYsyJim1vvcpQm5Y9hV5B1g==}
     peerDependencies:
       astro: ^3.3.0 || ^4.0.0-beta
     dependencies:
       astro: 4.0.7(typescript@5.3.3)
       hast-util-to-html: 8.0.4
-      remark-expressive-code: 0.32.3
+      remark-expressive-code: 0.32.4
     dev: false
 
   /astro@4.0.7(typescript@5.3.3):
@@ -2222,13 +2222,13 @@ packages:
     dev: false
     optional: true
 
-  /expressive-code@0.32.3:
-    resolution: {integrity: sha512-FqDIFugTvVCAKWzcgNT4PH7s6s/ITJbRbW8MLHLBbDhcErkMExGImYMkGyDblLDaIHS5vRQi735hW8bDl72/ow==}
+  /expressive-code@0.32.4:
+    resolution: {integrity: sha512-r+yUP2JV181tVR2EyYked7lT2W8bvL9o7xpdKU6q60FMU7Wh/DbGtH0jg+WmDxKK1C57iXF9chbBv+BsDPlUEQ==}
     dependencies:
-      '@expressive-code/core': 0.32.3
-      '@expressive-code/plugin-frames': 0.32.3
-      '@expressive-code/plugin-shiki': 0.32.3
-      '@expressive-code/plugin-text-markers': 0.32.3
+      '@expressive-code/core': 0.32.4
+      '@expressive-code/plugin-frames': 0.32.4
+      '@expressive-code/plugin-shiki': 0.32.4
+      '@expressive-code/plugin-text-markers': 0.32.4
     dev: false
 
   /extend-shallow@2.0.1:
@@ -4162,10 +4162,10 @@ packages:
       - supports-color
     dev: false
 
-  /remark-expressive-code@0.32.3:
-    resolution: {integrity: sha512-HSTdZ4AcOXugRK/3DStaslx9D35HhM1OlbWxdNXYU0QoJYq/Bv96eIKZaZmqd8WfTMUofvkVMhTqAppNMuf6Pw==}
+  /remark-expressive-code@0.32.4:
+    resolution: {integrity: sha512-khV7fVBpVDOyz9EXU+6MFwLj7BtY3DLVlNMMJYQcfp9ksLMxG/i83rIJbMUZCRof9bDBmFFlrF0VDvqJ0/MNeQ==}
     dependencies:
-      expressive-code: 0.32.3
+      expressive-code: 0.32.4
       hast-util-to-html: 8.0.4
       unist-util-visit: 4.1.2
     dev: false
