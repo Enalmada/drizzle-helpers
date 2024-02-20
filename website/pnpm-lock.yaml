@@ -15,11 +15,11 @@ dependencies:
     specifier: ^3.0.8
     version: 3.0.8(@types/react-dom@18.2.18)(@types/react@18.2.45)(react-dom@18.2.0)(react@18.2.0)(vite@5.0.10)
   '@astrojs/starlight':
-    specifier: ^0.18.0
-    version: 0.18.0(astro@4.0.7)
+    specifier: ^0.19.0
+    version: 0.19.0(astro@4.0.7)
   '@astrojs/starlight-tailwind':
     specifier: ^2.0.1
-    version: 2.0.1(@astrojs/starlight@0.18.0)(@astrojs/tailwind@5.0.4)(tailwindcss@3.4.0)
+    version: 2.0.1(@astrojs/starlight@0.19.0)(@astrojs/tailwind@5.0.4)(tailwindcss@3.4.0)
   '@astrojs/tailwind':
     specifier: ^5.0.4
     version: 5.0.4(astro@4.0.7)(tailwindcss@3.4.0)
@@ -233,20 +233,20 @@ packages:
       zod: 3.22.4
     dev: false
 
-  /@astrojs/starlight-tailwind@2.0.1(@astrojs/starlight@0.18.0)(@astrojs/tailwind@5.0.4)(tailwindcss@3.4.0):
+  /@astrojs/starlight-tailwind@2.0.1(@astrojs/starlight@0.19.0)(@astrojs/tailwind@5.0.4)(tailwindcss@3.4.0):
     resolution: {integrity: sha512-niMgFcR7NHcsBVy8UAN3F2gqhmoN5v83st5Hu4YzvUL+6SNwjQmIipXppXdN9+iVneRjPr6PLGzDfI+wnjSBWQ==}
     peerDependencies:
       '@astrojs/starlight': '>=0.9.0'
       '@astrojs/tailwind': ^5.0.0
       tailwindcss: ^3.3.3
     dependencies:
-      '@astrojs/starlight': 0.18.0(astro@4.0.7)
+      '@astrojs/starlight': 0.19.0(astro@4.0.7)
       '@astrojs/tailwind': 5.0.4(astro@4.0.7)(tailwindcss@3.4.0)
       tailwindcss: 3.4.0
     dev: false
 
-  /@astrojs/starlight@0.18.0(astro@4.0.7):
-    resolution: {integrity: sha512-pEYcuSf+t8aHJZQzGKJfgHGQpidrtifDqWE0jZevADpR+JJhyK2LXWhcOYCZiqDUil28FZmVr+/FrA3Dnw8xQQ==}
+  /@astrojs/starlight@0.19.0(astro@4.0.7):
+    resolution: {integrity: sha512-izNZLs99d4AAoN5eV6Ek71SVKEAs8N/GjT+n9J0Q8q1Zgtk/qcv3KzuPXBZmiAbPl/9E2+BG8f4dpdoc+F4U3g==}
     peerDependencies:
       astro: ^4.2.7
     dependencies:
@@ -261,6 +261,7 @@ packages:
       hast-util-select: 6.0.2
       hastscript: 8.0.0
       mdast-util-directive: 3.0.0
+      mdast-util-to-markdown: 2.1.0
       pagefind: 1.0.4
       rehype: 13.0.1
       remark-directive: 3.0.0
