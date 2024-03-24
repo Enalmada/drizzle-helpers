@@ -19,7 +19,7 @@
     "dotenv": "^16.3.1",
     "dotenv-cli": "^7.3.0",
     "drizzle-orm": "^0.30.0",
-    "postgres": "3.4.3"
+    "postgres": "3.4.4"
   },
   "devDependencies": {
     "@changesets/cli": "2.27.1",
