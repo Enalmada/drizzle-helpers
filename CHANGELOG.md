@@ -1,5 +1,12 @@
 # @enalmada/drizzle-helpers
 
+## 0.0.16
+
+### Patch Changes
+
+- bfc264a: eslint to biome update
+- bfc264a: dependency updates
+
 ## 0.0.15
 
 ### Patch Changes
