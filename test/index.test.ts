@@ -1,66 +1,71 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { databaseConfig, runMigrate } from '../src/migrate/migrate';
+import { databaseConfig, runMigrate } from "../src/migrate/migrate";
 
 // Define mockSqlCall within your test (or at the top scope of the file if you plan to use it in multiple tests):
+// biome-ignore lint/suspicious/noImplicitAnyLet: TBD
 let mockSqlCall;
 
-vi.mock('postgres', () => {
-  return {
-    default: (...args) => {
-      mockSqlCall(...args); // Forward the args to the mock function
-      return {
-        end: () => {
-          vi.fn();
-        },
-      };
-    },
-  };
+vi.mock("postgres", () => {
+	return {
+		default: (...args) => {
+			mockSqlCall(...args); // Forward the args to the mock function
+			return {
+				end: () => {
+					vi.fn();
+				},
+			};
+		},
+	};
 });
 
 // Mock the `migrate` method from `drizzle-orm/postgres-js`
-vi.mock('drizzle-orm/postgres-js', async (importOriginal) => {
-  const originalModule = await importOriginal();
-  return {
-    ...originalModule,
-    migrate: vi.fn().mockResolvedValue(true),
-  };
+vi.mock("drizzle-orm/postgres-js", async (importOriginal) => {
+	const originalModule = await importOriginal();
+	return {
+		...originalModule,
+		migrate: vi.fn().mockResolvedValue(true),
+	};
 });
-vi.mock('drizzle-orm/postgres-js/migrator', () => {
-  return {
-    migrate: vi.fn().mockResolvedValue(true),
-  };
-});
-
-vi.mock('../src/migrate/migrate', async (importOriginal) => {
-  const originalModule = await importOriginal();
-  return {
-    ...originalModule,
-    waitUntilDatabaseIsReady: vi.fn().mockResolvedValue(),
-  };
+vi.mock("drizzle-orm/postgres-js/migrator", () => {
+	return {
+		migrate: vi.fn().mockResolvedValue(true),
+	};
 });
 
-describe('Migration Tests', () => {
-  let exitSpy;
+vi.mock("../src/migrate/migrate", async (importOriginal) => {
+	const originalModule = await importOriginal();
+	return {
+		...originalModule,
+		waitUntilDatabaseIsReady: vi.fn().mockResolvedValue(),
+	};
+});
 
-  beforeEach(() => {
-    process.env.DATABASE_URL = 'mock-database-url';
-    // Mock process.exit
-    exitSpy = vi.spyOn(process, 'exit').mockImplementation((() => {}) as any);
-    // Reset the mockSqlCall for each test
-    mockSqlCall = vi.fn();
-  });
+describe("Migration Tests", () => {
+	// biome-ignore lint/suspicious/noImplicitAnyLet: TBD
+	let exitSpy;
 
-  afterEach(() => {
-    delete process.env.DATABASE_URL; // Clean up mock DATABASE_URL after each test
-    vi.clearAllMocks();
-    exitSpy.mockRestore(); // Restore the original process.exit function after each test
-  });
+	beforeEach(() => {
+		process.env.DATABASE_URL = "mock-database-url";
+		// Mock process.exit
+		// biome-ignore lint/suspicious/noExplicitAny: TBD
+		exitSpy = vi.spyOn(process, "exit").mockImplementation((() => {}) as any);
+		// Reset the mockSqlCall for each test
+		mockSqlCall = vi.fn();
+	});
 
-  it('should throw error when migrations folder not provided', async () => {
-    await expect(runMigrate()).rejects.toThrow('Migrations folder not provided');
-  });
+	afterEach(() => {
+		process.env.DATABASE_URL = undefined; // Clean up mock DATABASE_URL after each test
+		vi.clearAllMocks();
+		exitSpy.mockRestore(); // Restore the original process.exit function after each test
+	});
 
-  /*
+	it("should throw error when migrations folder not provided", async () => {
+		await expect(runMigrate()).rejects.toThrow(
+			"Migrations folder not provided",
+		);
+	});
+
+	/*
   test('should run migrations successfully', async () => {
     // Mock waitUntilDatabaseIsReady to be a no-op
     vi.spyOn(migrateModule, 'waitUntilDatabaseIsReady').mockResolvedValue();
@@ -77,24 +82,24 @@ describe('Migration Tests', () => {
 
    */
 
-  it('should handle database not ready by retrying', async () => {
-    // Modify the retry interval and max retries for testing purposes
-    databaseConfig.RETRY_INTERVAL = 1;
-    databaseConfig.MAX_RETRIES = 4;
+	it("should handle database not ready by retrying", async () => {
+		// Modify the retry interval and max retries for testing purposes
+		databaseConfig.RETRY_INTERVAL = 1;
+		databaseConfig.MAX_RETRIES = 4;
 
-    mockSqlCall
-      .mockImplementationOnce(() => {
-        throw new Error('⏳ Database not ready after maximum retries');
-      })
-      .mockResolvedValueOnce(true);
+		mockSqlCall
+			.mockImplementationOnce(() => {
+				throw new Error("⏳ Database not ready after maximum retries");
+			})
+			.mockResolvedValueOnce(true);
 
-    try {
-      await runMigrate('some-path');
-    } catch (error) {
-      // We expect an error to be thrown, but we handle it here so the test doesn't fail
-      expect(error.message).toBe('⏳ Database not ready after maximum retries');
-    }
+		try {
+			await runMigrate("some-path");
+		} catch (error) {
+			// We expect an error to be thrown, but we handle it here so the test doesn't fail
+			expect(error.message).toBe("⏳ Database not ready after maximum retries");
+		}
 
-    expect(mockSqlCall.mock.calls.length).toEqual(1);
-  });
+		expect(mockSqlCall.mock.calls.length).toEqual(1);
+	});
 });

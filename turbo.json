@@ -1,26 +1,21 @@
 {
-  "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
-  "pipeline": {
-    "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
-    },
-    "test": {
-      "inputs": ["src/**/*.tsx", "src/**/*.ts"],
-      "outputMode": "new-only"
-    },
-    "test:unit": {
-      "inputs": ["src/**/*.tsx", "src/**/*.ts"],
-      "outputMode": "new-only"
-    },
-    "lint": {
-      "outputMode": "new-only"
-    },
-    "check-types": {},
-    "dev:install": {
-      "inputs": ["package.json", "bun.lockb"],
-      "outputMode": "new-only"
-    }
-  }
+	"$schema": "https://turbo.build/schema.json",
+	"globalDependencies": ["**/.env.*local"],
+	"tasks": {
+		"build": {
+			"dependsOn": ["^build"],
+			"outputs": ["dist/**"]
+		},
+		"test": {
+			"inputs": ["src/**/*.tsx", "src/**/*.ts"]
+		},
+		"test:unit": {
+			"inputs": ["src/**/*.tsx", "src/**/*.ts"]
+		},
+		"lint": {},
+		"check-types": {},
+		"dev:install": {
+			"inputs": ["package.json", "bun.lockb"]
+		}
+	}
 }
