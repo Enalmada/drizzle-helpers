@@ -1,5 +1,5 @@
 // src/migrate/index.ts
-import {runMigrate} from "./migrate";
+import { runMigrate } from "./migrate";
 (async () => {
   const migrationsFolder = process.argv[2];
   try {

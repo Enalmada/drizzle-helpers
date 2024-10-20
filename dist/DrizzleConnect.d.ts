@@ -1,4 +1,4 @@
-import { type PostgresJsDatabase } from 'drizzle-orm/postgres-js';
+import { type PostgresJsDatabase } from "drizzle-orm/postgres-js";
 declare global {
     var drizzleDbClient: PostgresJsDatabase<any> | undefined;
 }

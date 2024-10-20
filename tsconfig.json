@@ -1,33 +1,28 @@
 {
-  "compilerOptions": {
-    "module": "ES2022",
-    "moduleResolution": "node",
-    "target": "ES2022",
-    "lib": ["ES2022"],
-    "types": ["vitest/globals"],
+	"compilerOptions": {
+		"module": "ES2022",
+		"moduleResolution": "node",
+		"target": "ES2022",
+		"lib": ["ES2022"],
+		"types": ["vitest/globals"],
 
-    "declaration": true,
-    "allowJs": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "noUnusedLocals": true,
-    "noImplicitAny": true,
-    "resolveJsonModule": true,
+		"declaration": true,
+		"allowJs": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"noUnusedLocals": true,
+		"noImplicitAny": true,
+		"resolveJsonModule": true,
 
-    // best practices
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
+		// best practices
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"skipLibCheck": true,
 
-    // locations
-    "outDir": "./dist",
-    "rootDir": "./src"
-  },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx"
-  ],
-  "exclude": [
-    "dist", "node_modules", "test"
-  ]
+		// locations
+		"outDir": "./dist",
+		"rootDir": "./src"
+	},
+	"include": ["src/**/*.ts", "src/**/*.tsx"],
+	"exclude": ["dist", "node_modules", "test"]
 }

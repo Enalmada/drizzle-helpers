@@ -1,7 +1,7 @@
 // src/index.ts
-import {connectToDatabase} from "./DrizzleConnect";
+import { connectToDatabase } from "./DrizzleConnect";
 import {
-createRepo
+  createRepo
 } from "./DrizzleOrm";
 export {
   createRepo,

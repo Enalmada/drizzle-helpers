@@ -1,5 +1,5 @@
 // src/DrizzleOrm.ts
-import {and, asc, desc, eq} from "drizzle-orm";
+import { and, asc, desc, eq } from "drizzle-orm";
 var buildWhereClause = (table, criteria) => {
   const conditions = criteria ? Object.keys(criteria).filter((key) => criteria[key] !== undefined).map((key) => {
     const criteriaType = key;
@@ -7,18 +7,16 @@ var buildWhereClause = (table, criteria) => {
   }) : [];
   if (conditions.length === 1) {
     return conditions[0];
-  } else {
-    return and(...conditions);
   }
+  return and(...conditions);
 };
 var buildOrderByClause = (table, order) => {
   if (!order)
     return;
   if (order.sortOrder === "asc") {
     return [asc(table[order.sortBy])];
-  } else {
-    return [desc(table[order.sortBy])];
   }
+  return [desc(table[order.sortBy])];
 };
 var DEFAULT_PAGE_SIZE = 20;
 var createRepo = (db, table, queryBuilder) => {
@@ -36,7 +34,10 @@ var createRepo = (db, table, queryBuilder) => {
   return {
     findFirst: async (criteria, config) => {
       const where = buildWhereClause(table, criteria);
-      return queryBuilder.findFirst({ where, with: config?.with });
+      return queryBuilder.findFirst({
+        where,
+        with: config?.with
+      });
     },
     findMany: async (config) => {
       return queryMany(table, queryBuilder, config);

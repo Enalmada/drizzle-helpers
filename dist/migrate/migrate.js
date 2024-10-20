@@ -1,10 +1,10 @@
 // src/migrate/migrate.ts
-import {drizzle} from "drizzle-orm/postgres-js";
-import {migrate} from "drizzle-orm/postgres-js/migrator";
+import { drizzle } from "drizzle-orm/postgres-js";
+import { migrate } from "drizzle-orm/postgres-js/migrator";
 import postgres from "postgres";
 var databaseConfig = {
-  RETRY_INTERVAL: process.env.DB_RETRY_INTERVAL ? parseInt(process.env.DB_RETRY_INTERVAL) : 1000,
-  MAX_RETRIES: process.env.DB_MAX_RETRIES ? parseInt(process.env.DB_MAX_RETRIES) : 10
+  RETRY_INTERVAL: process.env.DB_RETRY_INTERVAL ? Number.parseInt(process.env.DB_RETRY_INTERVAL) : 1000,
+  MAX_RETRIES: process.env.DB_MAX_RETRIES ? Number.parseInt(process.env.DB_MAX_RETRIES) : 10
 };
 var waitUntilDatabaseIsReady = async (sql) => {
   for (let attempts = 0;attempts < databaseConfig.MAX_RETRIES; attempts++) {

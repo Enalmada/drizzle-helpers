@@ -1,10 +1,10 @@
-import { type PgTableWithColumns } from 'drizzle-orm/pg-core';
-import { type RelationalQueryBuilder } from 'drizzle-orm/pg-core/query-builders/query';
-import { type PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import { type KnownKeysOnly } from 'drizzle-orm/utils';
+import type { PgTableWithColumns } from "drizzle-orm/pg-core";
+import type { RelationalQueryBuilder } from "drizzle-orm/pg-core/query-builders/query";
+import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
+import type { KnownKeysOnly } from "drizzle-orm/utils";
 export interface OrderBy {
     sortBy: string;
-    sortOrder: 'asc' | 'desc';
+    sortOrder: "asc" | "desc";
 }
 export interface Paging {
     page: number;
