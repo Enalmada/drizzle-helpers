@@ -30,5 +30,5 @@
 	"license": "UNLICENSED",
 	"type": "module",
 	"packageManager": "bun@1.1.31",
-	"trustedDependencies": ["sharp"]
+	"trustedDependencies": ["esbuild", "sharp"]
 }
