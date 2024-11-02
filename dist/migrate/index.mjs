@@ -847,7 +847,7 @@ function Connection(options, queues = {}, { onopen = noop, onend = noop, onclose
     initial && (queryError(initial, err), initial = null);
   }
   function queryError(query2, err) {
-    Object.defineProperties(err, {
+    "query" in err || "parameters" in err || Object.defineProperties(err, {
       stack: { value: err.stack + query2.origin.replace(/.*\n/, "\n"), enumerable: options.debug },
       query: { value: query2.string, enumerable: options.debug },
       parameters: { value: query2.parameters, enumerable: options.debug },
@@ -2079,7 +2079,7 @@ function iife(fn, ...args) {
 }
 
 // node_modules/drizzle-orm/version.js
-var version = "0.35.2";
+var version = "0.36.0";
 
 // node_modules/drizzle-orm/tracing.js
 var otel;
@@ -2754,7 +2754,7 @@ function isConfig(data) {
   }
   if ("client" in data) {
     const type = typeof data["client"];
-    if (type !== "object" && type !== "undefined")
+    if (type !== "object" && type !== "function" && type !== "undefined")
       return false;
     return true;
   }
@@ -3195,13 +3195,16 @@ class PgUUID extends PgColumn {
 
 // node_modules/drizzle-orm/pg-core/table.js
 var InlineForeignKeys = Symbol.for("drizzle:PgInlineForeignKeys");
+var EnableRLS = Symbol.for("drizzle:EnableRLS");
 
 class PgTable extends Table {
   static [entityKind] = "PgTable";
   static Symbol = Object.assign({}, Table.Symbol, {
-    InlineForeignKeys
+    InlineForeignKeys,
+    EnableRLS
   });
   [InlineForeignKeys] = [];
+  [EnableRLS] = false;
   [Table.Symbol.ExtraConfigBuilder] = undefined;
 }
 
