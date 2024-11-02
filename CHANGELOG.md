@@ -1,5 +1,12 @@
 # @enalmada/drizzle-helpers
 
+## 0.0.17
+
+### Patch Changes
+
+- 6c043f4: drizzle kit 0.36.0
+- 6c043f4: postgres 3.4.5
+
 ## 0.0.16
 
 ### Patch Changes
