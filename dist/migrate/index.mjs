@@ -361,7 +361,7 @@ var inferType = function inferType2(x) {
 var escapeBackslash = /\\/g;
 var escapeQuote = /"/g;
 function arrayEscape(x) {
-  return x.replace(escapeBackslash, "\\\\").replace(escapeQuote, '\\"');
+  return x.replace(escapeBackslash, "\\\\").replace(escapeQuote, "\\\"");
 }
 var arraySerializer = function arraySerializer2(xs, serializer, options, typarray) {
   if (Array.isArray(xs) === false)
@@ -848,7 +848,8 @@ function Connection(options, queues = {}, { onopen = noop, onend = noop, onclose
   }
   function queryError(query2, err) {
     "query" in err || "parameters" in err || Object.defineProperties(err, {
-      stack: { value: err.stack + query2.origin.replace(/.*\n/, "\n"), enumerable: options.debug },
+      stack: { value: err.stack + query2.origin.replace(/.*\n/, `
+`), enumerable: options.debug },
       query: { value: query2.string, enumerable: options.debug },
       parameters: { value: query2.parameters, enumerable: options.debug },
       args: { value: query2.args, enumerable: options.debug },
@@ -1381,7 +1382,7 @@ function Subscribe(postgres2, options) {
     }
     function pong() {
       const x2 = Buffer.alloc(34);
-      x2[0] = "r".charCodeAt(0);
+      x2[0] = 114;
       x2.fill(state2.lsn, 1);
       x2.writeBigInt64BE(BigInt(Date.now() - Date.UTC(2000, 0, 1)) * BigInt(1000), 25);
       stream2.write(x2);
@@ -2079,7 +2080,7 @@ function iife(fn, ...args) {
 }
 
 // node_modules/drizzle-orm/version.js
-var version = "0.36.0";
+var version = "0.38.0";
 
 // node_modules/drizzle-orm/tracing.js
 var otel;
@@ -2355,7 +2356,11 @@ class SQL {
         if (_config.invokeSource === "indexes") {
           return { sql: escapeName(columnName), params: [] };
         }
-        return { sql: escapeName(chunk.table[Table.Symbol.Name]) + "." + escapeName(columnName), params: [] };
+        const schemaName = chunk.table[Table.Symbol.Schema];
+        return {
+          sql: chunk.table[IsAlias] || schemaName === undefined ? escapeName(chunk.table[Table.Symbol.Name]) + "." + escapeName(columnName) : escapeName(schemaName) + "." + escapeName(chunk.table[Table.Symbol.Name]) + "." + escapeName(columnName),
+          params: []
+        };
       }
       if (is(chunk, View)) {
         const schemaName = chunk[ViewBaseConfig].schema;
@@ -2589,10 +2594,12 @@ function fillPlaceholders(params, values2) {
     return p;
   });
 }
+var IsDrizzleView = Symbol.for("drizzle:IsDrizzleView");
 
 class View {
   static [entityKind] = "View";
   [ViewBaseConfig];
+  [IsDrizzleView] = true;
   constructor({ name: name2, schema, selectedFields, query }) {
     this[ViewBaseConfig] = {
       name: name2,
@@ -2692,7 +2699,7 @@ function haveSameKeys(left, right) {
 }
 function mapUpdateSet(table, values2) {
   const entries = Object.entries(values2).filter(([, value]) => value !== undefined).map(([key, value]) => {
-    if (is(value, SQL)) {
+    if (is(value, SQL) || is(value, Column)) {
       return [key, value];
     } else {
       return [key, new Param(value, table[Table.Symbol.Columns][key])];
@@ -2796,98 +2803,14 @@ class PgDeleteBase extends QueryPromise {
   prepare(name) {
     return this._prepare(name);
   }
-  execute = (placeholderValues) => {
-    return tracer.startActiveSpan("drizzle.operation", () => {
-      return this._prepare().execute(placeholderValues);
-    });
-  };
-  $dynamic() {
+  authToken;
+  setToken(token) {
+    this.authToken = token;
     return this;
-  }
-}
-
-// node_modules/drizzle-orm/pg-core/query-builders/insert.js
-class PgInsertBuilder {
-  constructor(table, session, dialect, withList) {
-    this.table = table;
-    this.session = session;
-    this.dialect = dialect;
-    this.withList = withList;
-  }
-  static [entityKind] = "PgInsertBuilder";
-  values(values2) {
-    values2 = Array.isArray(values2) ? values2 : [values2];
-    if (values2.length === 0) {
-      throw new Error("values() must be called with at least one value");
-    }
-    const mappedValues = values2.map((entry) => {
-      const result = {};
-      const cols = this.table[Table.Symbol.Columns];
-      for (const colKey of Object.keys(entry)) {
-        const colValue = entry[colKey];
-        result[colKey] = is(colValue, SQL) ? colValue : new Param(colValue, cols[colKey]);
-      }
-      return result;
-    });
-    return new PgInsertBase(this.table, mappedValues, this.session, this.dialect, this.withList);
-  }
-}
-
-class PgInsertBase extends QueryPromise {
-  constructor(table, values2, session, dialect, withList) {
-    super();
-    this.session = session;
-    this.dialect = dialect;
-    this.config = { table, values: values2, withList };
-  }
-  static [entityKind] = "PgInsert";
-  config;
-  returning(fields = this.config.table[Table.Symbol.Columns]) {
-    this.config.returning = orderSelectedFields(fields);
-    return this;
-  }
-  onConflictDoNothing(config = {}) {
-    if (config.target === undefined) {
-      this.config.onConflict = sql`do nothing`;
-    } else {
-      let targetColumn = "";
-      targetColumn = Array.isArray(config.target) ? config.target.map((it) => this.dialect.escapeName(this.dialect.casing.getColumnCasing(it))).join(",") : this.dialect.escapeName(this.dialect.casing.getColumnCasing(config.target));
-      const whereSql = config.where ? sql` where ${config.where}` : undefined;
-      this.config.onConflict = sql`(${sql.raw(targetColumn)})${whereSql} do nothing`;
-    }
-    return this;
-  }
-  onConflictDoUpdate(config) {
-    if (config.where && (config.targetWhere || config.setWhere)) {
-      throw new Error('You cannot use both "where" and "targetWhere"/"setWhere" at the same time - "where" is deprecated, use "targetWhere" or "setWhere" instead.');
-    }
-    const whereSql = config.where ? sql` where ${config.where}` : undefined;
-    const targetWhereSql = config.targetWhere ? sql` where ${config.targetWhere}` : undefined;
-    const setWhereSql = config.setWhere ? sql` where ${config.setWhere}` : undefined;
-    const setSql = this.dialect.buildUpdateSet(this.config.table, mapUpdateSet(this.config.table, config.set));
-    let targetColumn = "";
-    targetColumn = Array.isArray(config.target) ? config.target.map((it) => this.dialect.escapeName(this.dialect.casing.getColumnCasing(it))).join(",") : this.dialect.escapeName(this.dialect.casing.getColumnCasing(config.target));
-    this.config.onConflict = sql`(${sql.raw(targetColumn)})${targetWhereSql} do update set ${setSql}${whereSql}${setWhereSql}`;
-    return this;
-  }
-  getSQL() {
-    return this.dialect.buildInsertQuery(this.config);
-  }
-  toSQL() {
-    const { typings: _typings, ...rest } = this.dialect.sqlToQuery(this.getSQL());
-    return rest;
-  }
-  _prepare(name) {
-    return tracer.startActiveSpan("drizzle.prepareQuery", () => {
-      return this.session.prepareQuery(this.dialect.sqlToQuery(this.getSQL()), this.config.returning, name, true);
-    });
-  }
-  prepare(name) {
-    return this._prepare(name);
   }
   execute = (placeholderValues) => {
     return tracer.startActiveSpan("drizzle.operation", () => {
-      return this._prepare().execute(placeholderValues);
+      return this._prepare().execute(placeholderValues, this.authToken);
     });
   };
   $dynamic() {
@@ -3610,7 +3533,7 @@ class PgDialect {
     return `"${name}"`;
   }
   escapeParam(num) {
-    return `\$${num + 1}`;
+    return `$${num + 1}`;
   }
   escapeString(str) {
     return `'${str.replace(/'/g, "''")}'`;
@@ -3648,12 +3571,19 @@ class PgDialect {
       return [res];
     }));
   }
-  buildUpdateQuery({ table, set, where, returning, withList }) {
+  buildUpdateQuery({ table, set, where, returning, withList, from, joins }) {
     const withSql = this.buildWithCTE(withList);
+    const tableName = table[PgTable.Symbol.Name];
+    const tableSchema = table[PgTable.Symbol.Schema];
+    const origTableName = table[PgTable.Symbol.OriginalName];
+    const alias = tableName === origTableName ? undefined : tableName;
+    const tableSql = sql`${tableSchema ? sql`${sql.identifier(tableSchema)}.` : undefined}${sql.identifier(origTableName)}${alias && sql` ${sql.identifier(alias)}`}`;
     const setSql = this.buildUpdateSet(table, set);
-    const returningSql = returning ? sql` returning ${this.buildSelection(returning, { isSingleTable: true })}` : undefined;
+    const fromSql = from && sql.join([sql.raw(" from "), this.buildFromTable(from)]);
+    const joinsSql = this.buildJoins(joins);
+    const returningSql = returning ? sql` returning ${this.buildSelection(returning, { isSingleTable: !from })}` : undefined;
     const whereSql = where ? sql` where ${where}` : undefined;
-    return sql`${withSql}update ${table} set ${setSql}${whereSql}${returningSql}`;
+    return sql`${withSql}update ${tableSql} set ${setSql}${fromSql}${joinsSql}${whereSql}${returningSql}`;
   }
   buildSelection(fields, { isSingleTable = false } = {}) {
     const columnsLen = fields.length;
@@ -3690,6 +3620,48 @@ class PgDialect {
     });
     return sql.join(chunks);
   }
+  buildJoins(joins) {
+    if (!joins || joins.length === 0) {
+      return;
+    }
+    const joinsArray = [];
+    for (const [index, joinMeta] of joins.entries()) {
+      if (index === 0) {
+        joinsArray.push(sql` `);
+      }
+      const table = joinMeta.table;
+      const lateralSql = joinMeta.lateral ? sql` lateral` : undefined;
+      if (is(table, PgTable)) {
+        const tableName = table[PgTable.Symbol.Name];
+        const tableSchema = table[PgTable.Symbol.Schema];
+        const origTableName = table[PgTable.Symbol.OriginalName];
+        const alias = tableName === origTableName ? undefined : joinMeta.alias;
+        joinsArray.push(sql`${sql.raw(joinMeta.joinType)} join${lateralSql} ${tableSchema ? sql`${sql.identifier(tableSchema)}.` : undefined}${sql.identifier(origTableName)}${alias && sql` ${sql.identifier(alias)}`} on ${joinMeta.on}`);
+      } else if (is(table, View)) {
+        const viewName = table[ViewBaseConfig].name;
+        const viewSchema = table[ViewBaseConfig].schema;
+        const origViewName = table[ViewBaseConfig].originalName;
+        const alias = viewName === origViewName ? undefined : joinMeta.alias;
+        joinsArray.push(sql`${sql.raw(joinMeta.joinType)} join${lateralSql} ${viewSchema ? sql`${sql.identifier(viewSchema)}.` : undefined}${sql.identifier(origViewName)}${alias && sql` ${sql.identifier(alias)}`} on ${joinMeta.on}`);
+      } else {
+        joinsArray.push(sql`${sql.raw(joinMeta.joinType)} join${lateralSql} ${table} on ${joinMeta.on}`);
+      }
+      if (index < joins.length - 1) {
+        joinsArray.push(sql` `);
+      }
+    }
+    return sql.join(joinsArray);
+  }
+  buildFromTable(table) {
+    if (is(table, Table) && table[Table.Symbol.OriginalName] !== table[Table.Symbol.Name]) {
+      let fullName = sql`${sql.identifier(table[Table.Symbol.OriginalName])}`;
+      if (table[Table.Symbol.Schema]) {
+        fullName = sql`${sql.identifier(table[Table.Symbol.Schema])}.${fullName}`;
+      }
+      return sql`${fullName} ${sql.identifier(table[Table.Symbol.Name])}`;
+    }
+    return table;
+  }
   buildSelectQuery({
     withList,
     fields,
@@ -3720,45 +3692,8 @@ class PgDialect {
       distinctSql = distinct === true ? sql` distinct` : sql` distinct on (${sql.join(distinct.on, sql`, `)})`;
     }
     const selection = this.buildSelection(fieldsList, { isSingleTable });
-    const tableSql = (() => {
-      if (is(table, Table) && table[Table.Symbol.OriginalName] !== table[Table.Symbol.Name]) {
-        let fullName = sql`${sql.identifier(table[Table.Symbol.OriginalName])}`;
-        if (table[Table.Symbol.Schema]) {
-          fullName = sql`${sql.identifier(table[Table.Symbol.Schema])}.${fullName}`;
-        }
-        return sql`${fullName} ${sql.identifier(table[Table.Symbol.Name])}`;
-      }
-      return table;
-    })();
-    const joinsArray = [];
-    if (joins) {
-      for (const [index, joinMeta] of joins.entries()) {
-        if (index === 0) {
-          joinsArray.push(sql` `);
-        }
-        const table2 = joinMeta.table;
-        const lateralSql = joinMeta.lateral ? sql` lateral` : undefined;
-        if (is(table2, PgTable)) {
-          const tableName = table2[PgTable.Symbol.Name];
-          const tableSchema = table2[PgTable.Symbol.Schema];
-          const origTableName = table2[PgTable.Symbol.OriginalName];
-          const alias = tableName === origTableName ? undefined : joinMeta.alias;
-          joinsArray.push(sql`${sql.raw(joinMeta.joinType)} join${lateralSql} ${tableSchema ? sql`${sql.identifier(tableSchema)}.` : undefined}${sql.identifier(origTableName)}${alias && sql` ${sql.identifier(alias)}`} on ${joinMeta.on}`);
-        } else if (is(table2, View)) {
-          const viewName = table2[ViewBaseConfig].name;
-          const viewSchema = table2[ViewBaseConfig].schema;
-          const origViewName = table2[ViewBaseConfig].originalName;
-          const alias = viewName === origViewName ? undefined : joinMeta.alias;
-          joinsArray.push(sql`${sql.raw(joinMeta.joinType)} join${lateralSql} ${viewSchema ? sql`${sql.identifier(viewSchema)}.` : undefined}${sql.identifier(origViewName)}${alias && sql` ${sql.identifier(alias)}`} on ${joinMeta.on}`);
-        } else {
-          joinsArray.push(sql`${sql.raw(joinMeta.joinType)} join${lateralSql} ${table2} on ${joinMeta.on}`);
-        }
-        if (index < joins.length - 1) {
-          joinsArray.push(sql` `);
-        }
-      }
-    }
-    const joinsSql = sql.join(joinsArray);
+    const tableSql = this.buildFromTable(table);
+    const joinsSql = this.buildJoins(joins);
     const whereSql = where ? sql` where ${where}` : undefined;
     const havingSql = having ? sql` having ${having}` : undefined;
     let orderBySql;
@@ -3831,41 +3766,53 @@ class PgDialect {
     const offsetSql = offset ? sql` offset ${offset}` : undefined;
     return sql`${leftChunk}${operatorChunk}${rightChunk}${orderBySql}${limitSql}${offsetSql}`;
   }
-  buildInsertQuery({ table, values: values2, onConflict, returning, withList }) {
+  buildInsertQuery({ table, values: valuesOrSelect, onConflict, returning, withList, select: select2, overridingSystemValue_ }) {
     const valuesSqlList = [];
     const columns = table[Table.Symbol.Columns];
     const colEntries = Object.entries(columns).filter(([_, col]) => !col.shouldDisableInsert());
     const insertOrder = colEntries.map(([, column]) => sql.identifier(this.casing.getColumnCasing(column)));
-    for (const [valueIndex, value] of values2.entries()) {
-      const valueList = [];
-      for (const [fieldName, col] of colEntries) {
-        const colValue = value[fieldName];
-        if (colValue === undefined || is(colValue, Param) && colValue.value === undefined) {
-          if (col.defaultFn !== undefined) {
-            const defaultFnResult = col.defaultFn();
-            const defaultValue = is(defaultFnResult, SQL) ? defaultFnResult : sql.param(defaultFnResult, col);
-            valueList.push(defaultValue);
-          } else if (!col.default && col.onUpdateFn !== undefined) {
-            const onUpdateFnResult = col.onUpdateFn();
-            const newValue = is(onUpdateFnResult, SQL) ? onUpdateFnResult : sql.param(onUpdateFnResult, col);
-            valueList.push(newValue);
-          } else {
-            valueList.push(sql`default`);
-          }
-        } else {
-          valueList.push(colValue);
-        }
+    if (select2) {
+      const select22 = valuesOrSelect;
+      if (is(select22, SQL)) {
+        valuesSqlList.push(select22);
+      } else {
+        valuesSqlList.push(select22.getSQL());
       }
-      valuesSqlList.push(valueList);
-      if (valueIndex < values2.length - 1) {
-        valuesSqlList.push(sql`, `);
+    } else {
+      const values2 = valuesOrSelect;
+      valuesSqlList.push(sql.raw("values "));
+      for (const [valueIndex, value] of values2.entries()) {
+        const valueList = [];
+        for (const [fieldName, col] of colEntries) {
+          const colValue = value[fieldName];
+          if (colValue === undefined || is(colValue, Param) && colValue.value === undefined) {
+            if (col.defaultFn !== undefined) {
+              const defaultFnResult = col.defaultFn();
+              const defaultValue = is(defaultFnResult, SQL) ? defaultFnResult : sql.param(defaultFnResult, col);
+              valueList.push(defaultValue);
+            } else if (!col.default && col.onUpdateFn !== undefined) {
+              const onUpdateFnResult = col.onUpdateFn();
+              const newValue = is(onUpdateFnResult, SQL) ? onUpdateFnResult : sql.param(onUpdateFnResult, col);
+              valueList.push(newValue);
+            } else {
+              valueList.push(sql`default`);
+            }
+          } else {
+            valueList.push(colValue);
+          }
+        }
+        valuesSqlList.push(valueList);
+        if (valueIndex < values2.length - 1) {
+          valuesSqlList.push(sql`, `);
+        }
       }
     }
     const withSql = this.buildWithCTE(withList);
     const valuesSql = sql.join(valuesSqlList);
     const returningSql = returning ? sql` returning ${this.buildSelection(returning, { isSingleTable: true })}` : undefined;
     const onConflictSql = onConflict ? sql` on conflict ${onConflict}` : undefined;
-    return sql`${withSql}insert into ${table} ${insertOrder} values ${valuesSql}${onConflictSql}${returningSql}`;
+    const overridingSql = overridingSystemValue_ === true ? sql`overriding system value ` : undefined;
+    return sql`${withSql}insert into ${table} ${insertOrder} ${overridingSql}${valuesSql}${onConflictSql}${returningSql}`;
   }
   buildRefreshMaterializedViewQuery({ view, concurrently, withNoData }) {
     const concurrentlySql = concurrently ? sql` concurrently` : undefined;
@@ -4184,6 +4131,11 @@ class PgSelectBuilder {
     }
     this.distinct = config.distinct;
   }
+  authToken;
+  setToken(token) {
+    this.authToken = token;
+    return this;
+  }
   from(source) {
     const isPartialSelect = !!this.fields;
     let fields;
@@ -4206,7 +4158,7 @@ class PgSelectBuilder {
       dialect: this.dialect,
       withList: this.withList,
       distinct: this.distinct
-    });
+    }).setToken(this.authToken);
   }
 }
 
@@ -4394,7 +4346,7 @@ class PgSelectQueryBuilderBase extends TypedQueryBuilder {
 class PgSelectBase extends PgSelectQueryBuilderBase {
   static [entityKind] = "PgSelect";
   _prepare(name) {
-    const { session, config, dialect, joinsNotNullableMap } = this;
+    const { session, config, dialect, joinsNotNullableMap, authToken } = this;
     if (!session) {
       throw new Error("Cannot execute a query on a query builder. Please use a database instance instead.");
     }
@@ -4402,15 +4354,20 @@ class PgSelectBase extends PgSelectQueryBuilderBase {
       const fieldsList = orderSelectedFields(config.fields);
       const query = session.prepareQuery(dialect.sqlToQuery(this.getSQL()), fieldsList, name, true);
       query.joinsNotNullableMap = joinsNotNullableMap;
-      return query;
+      return query.setToken(authToken);
     });
   }
   prepare(name) {
     return this._prepare(name);
   }
+  authToken;
+  setToken(token) {
+    this.authToken = token;
+    return this;
+  }
   execute = (placeholderValues) => {
     return tracer.startActiveSpan("drizzle.operation", () => {
-      return this._prepare().execute(placeholderValues);
+      return this._prepare().execute(placeholderValues, this.authToken);
     });
   };
 }
@@ -4524,6 +4481,117 @@ class QueryBuilder {
   }
 }
 
+// node_modules/drizzle-orm/pg-core/query-builders/insert.js
+class PgInsertBuilder {
+  constructor(table, session, dialect, withList, overridingSystemValue_) {
+    this.table = table;
+    this.session = session;
+    this.dialect = dialect;
+    this.withList = withList;
+    this.overridingSystemValue_ = overridingSystemValue_;
+  }
+  static [entityKind] = "PgInsertBuilder";
+  authToken;
+  setToken(token) {
+    this.authToken = token;
+    return this;
+  }
+  overridingSystemValue() {
+    this.overridingSystemValue_ = true;
+    return this;
+  }
+  values(values2) {
+    values2 = Array.isArray(values2) ? values2 : [values2];
+    if (values2.length === 0) {
+      throw new Error("values() must be called with at least one value");
+    }
+    const mappedValues = values2.map((entry) => {
+      const result = {};
+      const cols = this.table[Table.Symbol.Columns];
+      for (const colKey of Object.keys(entry)) {
+        const colValue = entry[colKey];
+        result[colKey] = is(colValue, SQL) ? colValue : new Param(colValue, cols[colKey]);
+      }
+      return result;
+    });
+    return new PgInsertBase(this.table, mappedValues, this.session, this.dialect, this.withList, false, this.overridingSystemValue_).setToken(this.authToken);
+  }
+  select(selectQuery) {
+    const select2 = typeof selectQuery === "function" ? selectQuery(new QueryBuilder) : selectQuery;
+    if (!is(select2, SQL) && !haveSameKeys(this.table[Columns], select2._.selectedFields)) {
+      throw new Error("Insert select error: selected fields are not the same or are in a different order compared to the table definition");
+    }
+    return new PgInsertBase(this.table, select2, this.session, this.dialect, this.withList, true);
+  }
+}
+
+class PgInsertBase extends QueryPromise {
+  constructor(table, values2, session, dialect, withList, select2, overridingSystemValue_) {
+    super();
+    this.session = session;
+    this.dialect = dialect;
+    this.config = { table, values: values2, withList, select: select2, overridingSystemValue_ };
+  }
+  static [entityKind] = "PgInsert";
+  config;
+  returning(fields = this.config.table[Table.Symbol.Columns]) {
+    this.config.returning = orderSelectedFields(fields);
+    return this;
+  }
+  onConflictDoNothing(config = {}) {
+    if (config.target === undefined) {
+      this.config.onConflict = sql`do nothing`;
+    } else {
+      let targetColumn = "";
+      targetColumn = Array.isArray(config.target) ? config.target.map((it) => this.dialect.escapeName(this.dialect.casing.getColumnCasing(it))).join(",") : this.dialect.escapeName(this.dialect.casing.getColumnCasing(config.target));
+      const whereSql = config.where ? sql` where ${config.where}` : undefined;
+      this.config.onConflict = sql`(${sql.raw(targetColumn)})${whereSql} do nothing`;
+    }
+    return this;
+  }
+  onConflictDoUpdate(config) {
+    if (config.where && (config.targetWhere || config.setWhere)) {
+      throw new Error('You cannot use both "where" and "targetWhere"/"setWhere" at the same time - "where" is deprecated, use "targetWhere" or "setWhere" instead.');
+    }
+    const whereSql = config.where ? sql` where ${config.where}` : undefined;
+    const targetWhereSql = config.targetWhere ? sql` where ${config.targetWhere}` : undefined;
+    const setWhereSql = config.setWhere ? sql` where ${config.setWhere}` : undefined;
+    const setSql = this.dialect.buildUpdateSet(this.config.table, mapUpdateSet(this.config.table, config.set));
+    let targetColumn = "";
+    targetColumn = Array.isArray(config.target) ? config.target.map((it) => this.dialect.escapeName(this.dialect.casing.getColumnCasing(it))).join(",") : this.dialect.escapeName(this.dialect.casing.getColumnCasing(config.target));
+    this.config.onConflict = sql`(${sql.raw(targetColumn)})${targetWhereSql} do update set ${setSql}${whereSql}${setWhereSql}`;
+    return this;
+  }
+  getSQL() {
+    return this.dialect.buildInsertQuery(this.config);
+  }
+  toSQL() {
+    const { typings: _typings, ...rest } = this.dialect.sqlToQuery(this.getSQL());
+    return rest;
+  }
+  _prepare(name) {
+    return tracer.startActiveSpan("drizzle.prepareQuery", () => {
+      return this.session.prepareQuery(this.dialect.sqlToQuery(this.getSQL()), this.config.returning, name, true);
+    });
+  }
+  prepare(name) {
+    return this._prepare(name);
+  }
+  authToken;
+  setToken(token) {
+    this.authToken = token;
+    return this;
+  }
+  execute = (placeholderValues) => {
+    return tracer.startActiveSpan("drizzle.operation", () => {
+      return this._prepare().execute(placeholderValues, this.authToken);
+    });
+  };
+  $dynamic() {
+    return this;
+  }
+}
+
 // node_modules/drizzle-orm/pg-core/query-builders/refresh-materialized-view.js
 class PgRefreshMaterializedView extends QueryPromise {
   constructor(view, session, dialect) {
@@ -4563,9 +4631,14 @@ class PgRefreshMaterializedView extends QueryPromise {
   prepare(name) {
     return this._prepare(name);
   }
+  authToken;
+  setToken(token) {
+    this.authToken = token;
+    return this;
+  }
   execute = (placeholderValues) => {
     return tracer.startActiveSpan("drizzle.operation", () => {
-      return this._prepare().execute(placeholderValues);
+      return this._prepare().execute(placeholderValues, this.authToken);
     });
   };
 }
@@ -4579,8 +4652,13 @@ class PgUpdateBuilder {
     this.withList = withList;
   }
   static [entityKind] = "PgUpdateBuilder";
+  authToken;
+  setToken(token) {
+    this.authToken = token;
+    return this;
+  }
   set(values2) {
-    return new PgUpdateBase(this.table, mapUpdateSet(this.table, values2), this.session, this.dialect, this.withList);
+    return new PgUpdateBase(this.table, mapUpdateSet(this.table, values2), this.session, this.dialect, this.withList).setToken(this.authToken);
   }
 }
 
@@ -4589,15 +4667,92 @@ class PgUpdateBase extends QueryPromise {
     super();
     this.session = session;
     this.dialect = dialect;
-    this.config = { set, table, withList };
+    this.config = { set, table, withList, joins: [] };
+    this.tableName = getTableLikeName(table);
+    this.joinsNotNullableMap = typeof this.tableName === "string" ? { [this.tableName]: true } : {};
   }
   static [entityKind] = "PgUpdate";
   config;
+  tableName;
+  joinsNotNullableMap;
+  from(source) {
+    const tableName = getTableLikeName(source);
+    if (typeof tableName === "string") {
+      this.joinsNotNullableMap[tableName] = true;
+    }
+    this.config.from = source;
+    return this;
+  }
+  getTableLikeFields(table) {
+    if (is(table, PgTable)) {
+      return table[Table.Symbol.Columns];
+    } else if (is(table, Subquery)) {
+      return table._.selectedFields;
+    }
+    return table[ViewBaseConfig].selectedFields;
+  }
+  createJoin(joinType) {
+    return (table, on) => {
+      const tableName = getTableLikeName(table);
+      if (typeof tableName === "string" && this.config.joins.some((join) => join.alias === tableName)) {
+        throw new Error(`Alias "${tableName}" is already used in this query`);
+      }
+      if (typeof on === "function") {
+        const from = this.config.from && !is(this.config.from, SQL) ? this.getTableLikeFields(this.config.from) : undefined;
+        on = on(new Proxy(this.config.table[Table.Symbol.Columns], new SelectionProxyHandler({ sqlAliasedBehavior: "sql", sqlBehavior: "sql" })), from && new Proxy(from, new SelectionProxyHandler({ sqlAliasedBehavior: "sql", sqlBehavior: "sql" })));
+      }
+      this.config.joins.push({ on, table, joinType, alias: tableName });
+      if (typeof tableName === "string") {
+        switch (joinType) {
+          case "left": {
+            this.joinsNotNullableMap[tableName] = false;
+            break;
+          }
+          case "right": {
+            this.joinsNotNullableMap = Object.fromEntries(Object.entries(this.joinsNotNullableMap).map(([key]) => [key, false]));
+            this.joinsNotNullableMap[tableName] = true;
+            break;
+          }
+          case "inner": {
+            this.joinsNotNullableMap[tableName] = true;
+            break;
+          }
+          case "full": {
+            this.joinsNotNullableMap = Object.fromEntries(Object.entries(this.joinsNotNullableMap).map(([key]) => [key, false]));
+            this.joinsNotNullableMap[tableName] = false;
+            break;
+          }
+        }
+      }
+      return this;
+    };
+  }
+  leftJoin = this.createJoin("left");
+  rightJoin = this.createJoin("right");
+  innerJoin = this.createJoin("inner");
+  fullJoin = this.createJoin("full");
   where(where) {
     this.config.where = where;
     return this;
   }
-  returning(fields = this.config.table[Table.Symbol.Columns]) {
+  returning(fields) {
+    if (!fields) {
+      fields = Object.assign({}, this.config.table[Table.Symbol.Columns]);
+      if (this.config.from) {
+        const tableName = getTableLikeName(this.config.from);
+        if (typeof tableName === "string" && this.config.from && !is(this.config.from, SQL)) {
+          const fromFields = this.getTableLikeFields(this.config.from);
+          fields[tableName] = fromFields;
+        }
+        for (const join of this.config.joins) {
+          const tableName2 = getTableLikeName(join.table);
+          if (typeof tableName2 === "string" && !is(join.table, SQL)) {
+            const fromFields = this.getTableLikeFields(join.table);
+            fields[tableName2] = fromFields;
+          }
+        }
+      }
+    }
     this.config.returning = orderSelectedFields(fields);
     return this;
   }
@@ -4609,13 +4764,20 @@ class PgUpdateBase extends QueryPromise {
     return rest;
   }
   _prepare(name) {
-    return this.session.prepareQuery(this.dialect.sqlToQuery(this.getSQL()), this.config.returning, name, true);
+    const query = this.session.prepareQuery(this.dialect.sqlToQuery(this.getSQL()), this.config.returning, name, true);
+    query.joinsNotNullableMap = this.joinsNotNullableMap;
+    return query;
   }
   prepare(name) {
     return this._prepare(name);
   }
+  authToken;
+  setToken(token) {
+    this.authToken = token;
+    return this;
+  }
   execute = (placeholderValues) => {
-    return this._prepare().execute(placeholderValues);
+    return this._prepare().execute(placeholderValues, this.authToken);
   };
   $dynamic() {
     return this;
@@ -4632,6 +4794,7 @@ class PgCountBuilder extends SQL {
     this.sql = PgCountBuilder.buildCount(params.source, params.filters);
   }
   sql;
+  token;
   static [entityKind] = "PgCountBuilder";
   [Symbol.toStringTag] = "PgCountBuilder";
   session;
@@ -4641,8 +4804,12 @@ class PgCountBuilder extends SQL {
   static buildCount(source, filters) {
     return sql`select count(*) as count from ${source}${sql.raw(" where ").if(filters)}${filters};`;
   }
+  setToken(token) {
+    this.token = token;
+    return this;
+  }
   then(onfulfilled, onrejected) {
-    return Promise.resolve(this.session.count(this.sql)).then(onfulfilled, onrejected);
+    return Promise.resolve(this.session.count(this.sql, this.token)).then(onfulfilled, onrejected);
   }
   catch(onRejected) {
     return this.then(undefined, onRejected);
@@ -4729,9 +4896,14 @@ class PgRelationalQuery extends QueryPromise {
   toSQL() {
     return this._toSQL().builtQuery;
   }
+  authToken;
+  setToken(token) {
+    this.authToken = token;
+    return this;
+  }
   execute() {
     return tracer.startActiveSpan("drizzle.operation", () => {
-      return this._prepare().execute();
+      return this._prepare().execute(undefined, this.authToken);
     });
   }
 }
@@ -4876,11 +5048,12 @@ class PgDatabase {
   refreshMaterializedView(view) {
     return new PgRefreshMaterializedView(view, this.session, this.dialect);
   }
+  authToken;
   execute(query) {
     const sequel = typeof query === "string" ? sql.raw(query) : query.getSQL();
     const builtQuery = this.dialect.sqlToQuery(sequel);
     const prepared = this.session.prepareQuery(builtQuery, undefined, undefined, false);
-    return new PgRaw(() => prepared.execute(), sequel, builtQuery, (result) => prepared.mapResult(result, true));
+    return new PgRaw(() => prepared.execute(undefined, this.authToken), sequel, builtQuery, (result) => prepared.mapResult(result, true));
   }
   transaction(transaction, config) {
     return this.session.transaction(transaction, config);
@@ -4892,11 +5065,16 @@ class PgPreparedQuery {
   constructor(query) {
     this.query = query;
   }
+  authToken;
   getQuery() {
     return this.query;
   }
   mapResult(response, _isFromBatch) {
     return response;
+  }
+  setToken(token) {
+    this.authToken = token;
+    return this;
   }
   static [entityKind] = "PgPreparedQuery";
   joinsNotNullableMap;
@@ -4907,19 +5085,19 @@ class PgSession {
     this.dialect = dialect;
   }
   static [entityKind] = "PgSession";
-  execute(query) {
+  execute(query, token) {
     return tracer.startActiveSpan("drizzle.operation", () => {
       const prepared = tracer.startActiveSpan("drizzle.prepareQuery", () => {
         return this.prepareQuery(this.dialect.sqlToQuery(query), undefined, undefined, false);
       });
-      return prepared.execute();
+      return prepared.setToken(token).execute(undefined, token);
     });
   }
   all(query) {
     return this.prepareQuery(this.dialect.sqlToQuery(query), undefined, undefined, false).all();
   }
-  async count(sql2) {
-    const res = await this.execute(sql2);
+  async count(sql2, token) {
+    const res = await this.execute(sql2, token);
     return Number(res[0]["count"]);
   }
 }
@@ -5114,7 +5292,12 @@ function drizzle(...params) {
 }
 ((drizzle2) => {
   function mock(config) {
-    return construct({}, config);
+    return construct({
+      options: {
+        parsers: {},
+        serializers: {}
+      }
+    }, config);
   }
   drizzle2.mock = mock;
 })(drizzle || (drizzle = {}));
@@ -5169,9 +5352,9 @@ var waitUntilDatabaseIsReady = async (sql2) => {
       return;
     } catch (err) {
       if (attempts === 0) {
-        console.log(`\u23F3 Database not ready. Retrying every ${databaseConfig.RETRY_INTERVAL / 1000}s...`);
+        console.log(`⏳ Database not ready. Retrying every ${databaseConfig.RETRY_INTERVAL / 1000}s...`);
       } else if (attempts === databaseConfig.MAX_RETRIES - 1) {
-        throw new Error("\u23F3 Database not ready after maximum retries");
+        throw new Error("⏳ Database not ready after maximum retries");
       }
       await new Promise((resolve) => setTimeout(resolve, databaseConfig.RETRY_INTERVAL));
     }
@@ -5187,15 +5370,15 @@ var runMigrate = async (migrationsFolder) => {
   const sql2 = src_default(process.env.DATABASE_URL, { max: 1 });
   const db = drizzle(sql2);
   try {
-    console.log("\u23F3 Waiting for database to be ready...");
+    console.log("⏳ Waiting for database to be ready...");
     await waitUntilDatabaseIsReady(sql2);
-    console.log("\u23F3 Running migrations...");
+    console.log("⏳ Running migrations...");
     const start = Date.now();
     await migrate(db, { migrationsFolder });
     const end = Date.now();
-    console.log(`\u2705 Migrations completed in ${end - start}ms`);
+    console.log(`✅ Migrations completed in ${end - start}ms`);
   } catch (err) {
-    console.error("\u274C Migration failed", err);
+    console.error("❌ Migration failed", err);
     throw err;
   } finally {
     await sql2.end();
