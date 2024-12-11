@@ -1,5 +1,11 @@
 # @enalmada/drizzle-helpers
 
+## 0.0.18
+
+### Patch Changes
+
+- f5e45bb: peer dependency drizzle-orm postgres
+
 ## 0.0.17
 
 ### Patch Changes
