@@ -13,9 +13,9 @@ var waitUntilDatabaseIsReady = async (sql) => {
       return;
     } catch (err) {
       if (attempts === 0) {
-        console.log(`\u23F3 Database not ready. Retrying every ${databaseConfig.RETRY_INTERVAL / 1000}s...`);
+        console.log(`⏳ Database not ready. Retrying every ${databaseConfig.RETRY_INTERVAL / 1000}s...`);
       } else if (attempts === databaseConfig.MAX_RETRIES - 1) {
-        throw new Error("\u23F3 Database not ready after maximum retries");
+        throw new Error("⏳ Database not ready after maximum retries");
       }
       await new Promise((resolve) => setTimeout(resolve, databaseConfig.RETRY_INTERVAL));
     }
@@ -31,15 +31,15 @@ var runMigrate = async (migrationsFolder) => {
   const sql = postgres(process.env.DATABASE_URL, { max: 1 });
   const db = drizzle(sql);
   try {
-    console.log("\u23F3 Waiting for database to be ready...");
+    console.log("⏳ Waiting for database to be ready...");
     await waitUntilDatabaseIsReady(sql);
-    console.log("\u23F3 Running migrations...");
+    console.log("⏳ Running migrations...");
     const start = Date.now();
     await migrate(db, { migrationsFolder });
     const end = Date.now();
-    console.log(`\u2705 Migrations completed in ${end - start}ms`);
+    console.log(`✅ Migrations completed in ${end - start}ms`);
   } catch (err) {
-    console.error("\u274C Migration failed", err);
+    console.error("❌ Migration failed", err);
     throw err;
   } finally {
     await sql.end();
