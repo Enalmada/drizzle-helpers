@@ -1,11 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any,@typescript-eslint/ban-ts-comment */
 import { and, asc, desc, eq } from "drizzle-orm";
+import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import type { PgTableWithColumns } from "drizzle-orm/pg-core";
 import type { RelationalQueryBuilder } from "drizzle-orm/pg-core/query-builders/query";
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import type { KnownKeysOnly } from "drizzle-orm/utils";
 
 type CriteriaType<T> = keyof T;
+
+type SchemaType = Record<string, unknown>;
+type DatabaseType<T extends SchemaType> =
+	| PostgresJsDatabase<T>
+	| NodePgDatabase<T>;
 
 const buildWhereClause = <T>(
 	// biome-ignore lint/suspicious/noExplicitAny: TBD
@@ -84,13 +90,13 @@ export interface IRepository<T, TI> {
 }
 
 export const createRepo = <
-	TSchema extends Record<string, unknown>,
+	TSchema extends SchemaType,
 	// biome-ignore lint/suspicious/noExplicitAny: TBD
 	T extends { [key: string]: any },
 	// biome-ignore lint/suspicious/noExplicitAny: TBD
 	TI extends { [key: string]: any },
 >(
-	db: PostgresJsDatabase<TSchema>, // replace with the appropriate type for db
+	db: DatabaseType<TSchema>, // replace with the appropriate type for db
 	// biome-ignore lint/suspicious/noExplicitAny: TBD
 	table: PgTableWithColumns<any>,
 	// biome-ignore lint/suspicious/noExplicitAny: TBD
