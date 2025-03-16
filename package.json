@@ -1,6 +1,6 @@
 {
 	"name": "@enalmada/drizzle-helpers",
-	"version": "0.0.18",
+	"version": "0.0.19",
 	"scripts": {
 		"build": "bun build:clear && bun build:script && bun build:declaration",
 		"build:clear": "rm -rf dist",

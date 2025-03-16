@@ -1,5 +1,15 @@
 # @enalmada/drizzle-helpers
 
+## 0.0.19
+
+### Patch Changes
+
+- 3820347: ## Using `pg` as driver while creating a new repository
+
+  Currently only `postgres` ( PostgresJS ) is supported as database driver.
+
+  With this change, it's also possible to use `pg` ( node-postgres ) as driver.
+
 ## 0.0.18
 
 ### Patch Changes
